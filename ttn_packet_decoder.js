@@ -1,12 +1,14 @@
 function Decoder(bytes, port) {
-  // RADIOBRIDGE THE THINGS NETWORK PACKET DECODER
+  // RADIO BRIDGE THE THINGS NETWORK PACKET DECODER v0.1
   // (c) 2019 RadioBridge USA by John Sheldon
 
   // TODO: Need good bytes to HEX function
   //       Change var names to match non-simplemode names
   //       Faults and Error codes
   //       Downlink descriptions
-
+  //       Use real temps instead of bytes for verbose mode
+  //       Shorten long descriptions for simplemode
+  
   // Use SIMPLEMODE to show basic sensor messages only
   // Disable SIMPLEMODE to output raw bytes of packet
   // Set to 1 to turn SIMPLEMODE on, set to 0 for off
@@ -206,7 +208,7 @@ function Decoder(bytes, port) {
         case 1:EventPayload = "Temperature has Risen Above Upper Threshold";break;
         case 2:EventPayload = "Temperature has Fallen Below Lower Threshold";break;
         case 3:EventPayload = "Temperature Report on Change Increase";break;
-        case 4:EventPayload = "Temperature Report on Change Decrease";
+        case 4:EventPayload = "Temperature Report on Change Decrease";break;
         case 5:EventPayload = "Humidity has Risen Above Upper Threshold";break;
         case 6:EventPayload = "Humidity has Fallen Below Lower Threshold";break;
         case 7:EventPayload = "Humidity Report on Change Increase";break;
