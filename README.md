@@ -6,3 +6,5 @@ KNOWN ISSUES:
   Thermocouple does not go negative
   
   
+For questions please contact:
+support.radiobridge.com
