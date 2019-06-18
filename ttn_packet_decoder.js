@@ -1,5 +1,5 @@
 function Decoder(bytes, port) {
-  //   RADIO BRIDGE TTN PACKET DECODER v0.1
+  //   RADIO BRIDGE TTN PACKET DECODER v0.2
   // (c) 2019 RadioBridge USA by John Sheldon
 
   // TODO: 
