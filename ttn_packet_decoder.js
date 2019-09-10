@@ -13,14 +13,21 @@ function Decoder(bytes, port) {
   SIMPLEMODE = 1;
 
   var decoded = {};
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ // UPLINKS
   if (!SIMPLEMODE) {
     decoded.PORT = port;
     decoded.SEQUENCE = Hex(bytes[0] - 16)
     decoded.EVENT_TYPE = Hex(bytes[1]);
   }
   EventType = Hex(bytes[1]);
- 
-  switch(EventType) {
+   switch(EventType) {
 
   // ==================    RESET EVENT    ====================
     case "00":
@@ -211,12 +218,12 @@ function Decoder(bytes, port) {
         case 0:ReportType = "Periodic Report";break;
         case 1:ReportType = "Temperature has Risen Above Upper Threshold";break;
         case 2:ReportType = "Temperature has Fallen Below Lower Threshold";break;
-        case 3:ReportType = "Temperature Report on Change Increase";break;
-        case 4:ReportType = "Temperature Report on Change Decrease";break;
+        case 3:ReportType = "Temperature Increase";break;
+        case 4:ReportType = "Temperature Decrease";break;
         case 5:ReportType = "Humidity has Risen Above Upper Threshold";break;
         case 6:ReportType = "Humidity has Fallen Below Lower Threshold";break;
-        case 7:ReportType = "Humidity Report on Change Increase";break;
-        case 8:ReportType = "Humidity Report on Change Decrease";
+        case 7:ReportType = "Humidity Increase";break;
+        case 8:ReportType = "Humidity Decrease";
         }
       decoded.Message = ReportType + ": Temp: " + Temperature + "°C / Humd: " + Humidity + "%";
       break;
@@ -324,6 +331,43 @@ function Decoder(bytes, port) {
     else {
       decoded.REPORT_TYPE = bytes[2];
       decoded.TEMPERATURE = Temperature;
+    }
+    break;
+
+  // ================  VOLTMETER ANALOG EVENT  ==================
+  case "14":
+    Analog = ((bytes[3] * 256) + bytes[4]) / 100;
+    if (SIMPLEMODE) {
+      switch(bytes[2]) {
+        case 0:ReportType = "Periodic Report";break;
+        case 1:ReportType = "Voltmeter has Risen Above Upper Threshold";break;
+        case 2:ReportType = "Voltmeter has Fallen Below Lower Threshold";break;
+        case 3:ReportType = "Report on Change Increase";break;
+        case 4:ReportType = "Report on Change Decrease";
+      }
+
+      decoded.Message = ReportType + ": " + Analog + "V";
+      break;
+    }
+    else {
+      decoded.REPORT_TYPE = bytes[2];
+      decoded.ANALOG_VALUE = Analog;
+    }
+    break;	
+
+  // ================   LINK QUALITY EVENT  ==================
+ case "FB":
+    if (SIMPLEMODE) {
+	  RSSI = Convert(bytes[3],0)
+	  SNR = +(bytes[4]).toFixed(1)
+      ReportType="Link Quality"
+      decoded.Message = ReportType + ": RSSI: " + RSSI + " SNR: " + SNR;
+      break;
+    }
+    else {
+      decoded.REPORT_TYPE = Hex(bytes[2]);
+      decoded.RSSI = RSSI
+      decoded.SNR = SNR
     }
     break;
 
