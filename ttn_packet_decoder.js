@@ -211,9 +211,9 @@ function Decoder(bytes, port) {
 
   // =============  AIR TEMP & HUMIDITY EVENT  ===============
   case "0D":
+    Temperature = Convert((bytes[3]) + (bytes[4] / 160),1);
+    Humidity = +(bytes[5] + (bytes[6] / 160)).toFixed(1);
     if (SIMPLEMODE) {
-	  Temperature = Convert((bytes[3]) + (bytes[4] / 160),1)
-	  Humidity = +(bytes[5] + (bytes[6] / 160)).toFixed(1)
       switch(bytes[2]) {
         case 0:ReportType = "Periodic Report";break;
         case 1:ReportType = "Temperature has Risen Above Upper Threshold";break;
@@ -226,12 +226,11 @@ function Decoder(bytes, port) {
         case 8:ReportType = "Humidity Decrease";
         }
       decoded.Message = ReportType + ": Temp: " + Temperature + "°C / Humd: " + Humidity + "%";
-      break;
     }
     else {
       decoded.REPORT_TYPE = Hex(bytes[2]);
-      decoded.TEMPERATURE = Temperature
-      decoded.HUMIDITY = Humidity
+      decoded.TEMPERATURE = Temperature;
+      decoded.HUMIDITY = Humidity;
     }
     break;
 
