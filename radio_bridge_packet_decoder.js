@@ -21,6 +21,7 @@ var TILT_HP_EVENT = "0F";
 var ULTRASONIC_EVENT = "10";
 var SENSOR420MA_EVENT = "11";
 var THERMOCOUPLE_EVENT = "13";
+var VOLTMETER_EVENT = "14";
 var CUSTOM_SENSOR_EVENT = "15";
 var GPS_EVENT = "16";
 var HONEYWELL5800_EVENT = "17";
@@ -485,7 +486,7 @@ function Generic_Decoder(bytes, port) {
             decoded.Message += ", Thermocouple Event: " + ThermocoupleEventDescription;
 
             // decode is across 16-bits
-            Temperature = (((bytes[3] * 256) + bytes[4]) / 16).toFixed(2);
+            Temperature = parseInt(((bytes[3] * 256) + bytes[4]) / 16);
 
             decoded.Message += ", Temperature: " + Temperature + "°C";
 
