@@ -11,10 +11,7 @@ Release 0.2 - Standardized decoded variable names,
               Temp/Humd/Angle decodes to values not bytes, 
               All returned values in numbers not strings
 
-KNOWN ISSUES:
-
-  Thermocouple does not go negative - update byte converter, 
-  Simplemode descriptions sometimes too long for TTN display
+Release 1.0 - Added new sensor types
   
 For questions please contact:
 support.radiobridge.com
