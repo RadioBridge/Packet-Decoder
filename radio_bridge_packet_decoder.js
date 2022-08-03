@@ -118,7 +118,7 @@ function Generic_Decoder(bytes , port) {
             // FirmwareFormat of 0 is old format, 1 is new format
             // old format is has two sections x.y
             // new format has three sections x.y.z
-            if (FirmwareFormat == 0)
+            if (FirmwareFormat === 0)
                 FirmwareVersion = bytes[4] + "." + bytes[5];
             else
                 FirmwareVersion = ((bytes[4] >> 2) & 0x1F) + "." + ((bytes[4] & 0x03) + ((bytes[5] >> 5) & 0x07)) + "." + (bytes[5] & 0x1F);
@@ -196,7 +196,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: { 
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "LINK QUALITY",
               Link_Quality: {
                 RSSI: RSSILastDownlink,
@@ -234,7 +234,7 @@ function Generic_Decoder(bytes , port) {
               Type: "DOOR/WINDOW",
               DoorWindow: {
                 Event: DoorEvent,
-            }};
+            }}};
             break;
 
         // ===============  PUSH BUTTON EVENT   ===================
@@ -263,7 +263,7 @@ function Generic_Decoder(bytes , port) {
             
             decode = {data: { 
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "BUTTON",
               Button: {
                 Event: ButtonEvent,
@@ -285,7 +285,7 @@ function Generic_Decoder(bytes , port) {
                         
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "CONTACT",
               Contact: {
                 Event: ContactEvent,
@@ -307,7 +307,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "WATER",
               Water: {
                 Event: WaterState,
@@ -338,7 +338,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "TEMPERATURE",
               Temperature: {
                 Event: TempEvent,
@@ -365,7 +365,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "TILT",
               Tilt: {
                 Event: TiltEvent,
@@ -400,7 +400,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "ATH",
               ATH: {
                 Event: ATHEvent,
@@ -422,7 +422,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "ABM",
               ABM: {
                 Event: ABMEvent,
@@ -451,7 +451,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "TILT-HP",
               TiltHP: {
                 Event: TiltHPEvent,
@@ -480,7 +480,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "ULTRASONIC",
               Ultrasonic: {
                 Event: UltrasonicEvent,
@@ -495,12 +495,12 @@ function Generic_Decoder(bytes , port) {
             EventType = bytes[2];
 
             switch (EventType) {
-              case 0:  420mAEvent = "Periodic Report"; break;
-              case 1:  420mAEvent = "Analog Value has Risen Above Upper Threshold"; break;
-              case 2:  420mAEvent = "Analog Value has Fallen Below Lower Threshold"; break;
-              case 3:  420mAEvent = "Report on Change Increase"; break;
-              case 4:  420mAEvent = "Report on Change Decrease"; break;
-              default: 420mAEvent = "Undefined"; break;
+              case 0:  A420mAEvent = "Periodic Report"; break;
+              case 1:  A420mAEvent = "Analog Value has Risen Above Upper Threshold"; break;
+              case 2:  A420mAEvent = "Analog Value has Fallen Below Lower Threshold"; break;
+              case 3:  A420mAEvent = "Report on Change Increase"; break;
+              case 4:  A420mAEvent = "Report on Change Decrease"; break;
+              default: A420mAEvent = "Undefined"; break;
             }
 
             // calculatec across 16-bits, convert from units of 10uA to mA
@@ -508,10 +508,10 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "4-20mA",
-              420mA: {
-                Event: 420mAEvent,
+              A420mA: {
+                Event: A420mAEvent,
                 Current: Analog420mA,
             }}};
 
@@ -547,18 +547,18 @@ function Generic_Decoder(bytes , port) {
             FaultOpenCircuit = Faults & 0x01;
 
             // Decode faults
-            if (FaultColdOutsideRange)    FaultCOR = "True" else FaultCOR = "False";
-            if (FaultHotOutsideRange)     FaultHOR = "True" else FaultHOR = "False";
-            if (FaultColdAboveThresh)     FaultCAT = "True" else FaultCAT = "False";
-            if (FaultColdBelowThresh)     FaultCBT = "True" else FaultCBT = "False";
-            if (FaultTCTooHigh)           FaultTCH = "True" else FaultTCH = "False";
-            if (FaultTCTooLow)            FaultTCL = "True" else FaultTCL = "False";
-            if (FaultVoltageOutsideRange) FaultVOR = "True" else FaultVOR = "False";
-            if (FaultOpenCircuit)         FaultOPC = "True" else FaultOPC = "False";
+            if (FaultColdOutsideRange)    FaultCOR = "True"; else FaultCOR = "False";
+            if (FaultHotOutsideRange)     FaultHOR = "True"; else FaultHOR = "False";
+            if (FaultColdAboveThresh)     FaultCAT = "True"; else FaultCAT = "False";
+            if (FaultColdBelowThresh)     FaultCBT = "True"; else FaultCBT = "False";
+            if (FaultTCTooHigh)           FaultTCH = "True"; else FaultTCH = "False";
+            if (FaultTCTooLow)            FaultTCL = "True"; else FaultTCL = "False";
+            if (FaultVoltageOutsideRange) FaultVOR = "True"; else FaultVOR = "False";
+            if (FaultOpenCircuit)         FaultOPC = "True"; else FaultOPC = "False";
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "Thermocouple",
               Thermocouple: {
                 Event: ThermocoupleEvent,
@@ -569,7 +569,7 @@ function Generic_Decoder(bytes , port) {
                   ColdAboveThresh: FaultCAT,
                   ColdBelowThresh: FaultCBT,
                   TCTooHigh: FaultTCH,
-                  TCTooLow: Fault TCL,
+                  TCTooLow: FaultTCL,
                   VoltageOutsideRange: FaultVOR,
                   OpenCircuit: FaultOPC
             }}}};
@@ -595,7 +595,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "VOLTMETER",
               Voltmeter: {
                 Event: VoltmeterEvent,
@@ -631,7 +631,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "GPS",
               GPS: {
                 FixValid: FixValid,
@@ -662,7 +662,7 @@ function Generic_Decoder(bytes , port) {
 
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "HONEYWELL5800",
               Honeywell: {
                 Event: HWEvent,
@@ -736,7 +736,7 @@ function Generic_Decoder(bytes , port) {
                 DownlinkEvent = "Message Valid";
             decode = {data: {
               Protocol: ProtocolVersion,
-              Counter: PacketCounter
+              Counter: PacketCounter,
               Type: "DOWNLINKACK",
               DownlinkACK: {
                 Event: DownlinkEvent,
