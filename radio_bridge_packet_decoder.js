@@ -7,6 +7,10 @@
 //   RBS305 Series
 //   RBS306 Series (except RBS306-VSHB & RBS306-CMPS)
 
+// VERSION 1.1 NOTES:
+//   Changed output to JSON
+//   Various bug fixes for decodes
+//   Compatible with TTNv3
 
 // General defines used in decode
 
