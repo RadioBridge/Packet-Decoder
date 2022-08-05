@@ -1,16 +1,25 @@
-//   RADIO BRIDGE PACKET DECODER v1.1
-// (c) 2022 RadioBridge USA by John Sheldon
+//     RADIO BRIDGE PACKET DECODER v1.1
+// (c)2022 Radio Bridge USA by John Sheldon
+
+// SUPPORTED SENSORS:
+//   RBS301 Series
+//   RBS304 Series
+//   RBS305 Series
+//   RBS306 Series (except RBS306-VSHB & RBS306-CMPS)
+
 
 // General defines used in decode
-////Common Events
+
+//  Common Events
 var RESET_EVENT               = "00";
 var SUPERVISORY_EVENT         = "01";
 var TAMPER_EVENT              = "02";
 var LINK_QUALITY_EVENT        = "FB";
-var RATE_LIMIT_EXCEEDED_EVENT = "FC";
-var TEST_MESSAGE_EVENT        = "FD";
+var RATE_LIMIT_EXCEEDED_EVENT = "FC"; //deprecated
+var TEST_MESSAGE_EVENT        = "FD"; //deprecated
 var DOWNLINK_ACK_EVENT        = "FF";
-////Device-Specific Events
+
+//  Device-Specific Events
 var DOOR_WINDOW_EVENT         = "03";
 var PUSH_BUTTON_EVENT         = "06";
 var CONTACT_EVENT             = "07";
@@ -310,7 +319,7 @@ function Generic_Decoder(bytes , port) {
               Counter: PacketCounter,
               Type: "WATER",
               Water: {
-                Event: WaterState,
+                Event: WaterEvent,
                 Relative: WaterRelative,
             }}};
 
@@ -646,9 +655,9 @@ function Generic_Decoder(bytes , port) {
         case HONEYWELL5800_EVENT:
 
             // honeywell sensor ID, 24-bits
-            HWSensorID = (bytes[2] * (2 ^ 16)) + (bytes[3] * (2 ^ 8)) + bytes[4];
-
-            EventType = bytes[5];
+            //HWSensorID = Hex((bytes[3] * (2 ^ 16)) + (bytes[4] * (2 ^ 8)) + bytes[5]);
+            HWSensorID = Hex(bytes[3])+Hex(bytes[4])+Hex(bytes[5]);
+            EventType = bytes[2];
 
             switch (EventType) {
                 case 0: HWEvent = "Status code"; break;
@@ -658,13 +667,14 @@ function Generic_Decoder(bytes , port) {
             }
 
             // represent the honeywell sensor payload in hex
-            HWPayload = Hex((bytes[6] * 256) + bytes[7]);
+            HWPayload = Hex(bytes[6]);
 
             decode = {data: {
               Protocol: ProtocolVersion,
               Counter: PacketCounter,
               Type: "HONEYWELL5800",
               Honeywell: {
+                DeviceID: HWSensorID,
                 Event: HWEvent,
                 Payload: HWPayload,
             }}};
