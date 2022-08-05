@@ -48,49 +48,38 @@ var decoded = {};
 
 // Different network servers have different callback functions
 // Each of these is mapped to the generic decoder function
-
 // ----------------------------------------------
-
 // function called by ChirpStack
 function Decode(fPort, bytes, variables) {
     return Generic_Decoder(bytes, fPort);
 }
-
 // function called by TTN
 function Decoder(bytes, port) {
     return Generic_Decoder(bytes, port);
 }
-
 // function called by TTNv3
 function decodeUplink(input) {
     return Generic_Decoder(input.bytes, input.port);
 }
-
 // ----------------------------------------------
 
 
 // The generic decode function called by one of the above network server specific callbacks
 function Generic_Decoder(bytes , port) {
-
     // data structure which contains decoded messages
     var decode = { data: { Event: "UNDEFINED" }};
-
     // The first byte contains the protocol version (upper nibble) and packet counter (lower nibble)
     ProtocolVersion = (bytes[0] >> 4) & 0x0f;
     PacketCounter = bytes[0] & 0x0f;
-
     // the event type is defined in the second byte
     PayloadType = Hex(bytes[1]);
-
     // the rest of the message decode is dependent on the type of event
     switch (PayloadType) {
 
         // ==================    RESET EVENT    ====================
         case RESET_EVENT:
-
             // third byte is device type, convert to hex format for case statement 
             EventType = Hex(bytes[2]);
-
             // device types are enumerated below
             switch (EventType) {
                 case "01": DeviceType = "Door/Window Sensor"; break;
@@ -124,10 +113,8 @@ function Generic_Decoder(bytes , port) {
 
             // the hardware version has the major version in the upper nibble, and the minor version in the lower nibble
             HardwareVersion = ((bytes[3] >> 4) & 0x0f) + "." + (bytes[3] & 0x0f);
-
             // the firmware version has two different formats depending on the most significant bit
             FirmwareFormat = (bytes[4] >> 7) & 0x01;
-
             // FirmwareFormat of 0 is old format, 1 is new format
             // old format is has two sections x.y
             // new format has three sections x.y.z
@@ -145,20 +132,15 @@ function Generic_Decoder(bytes , port) {
                 Firmware: FirmwareVersion,
                 Hardware: HardwareVersion
             }}};
-            
             break;
 
         // ================   SUPERVISORY EVENT   ==================
-
         case SUPERVISORY_EVENT:
             // note that the sensor state in the supervisory message is being depreciated, so those are not decoded here
-
             // battery voltage is in the format x.y volts where x is upper nibble and y is lower nibble
             BatteryLevel = ((bytes[4] >> 4) & 0x0f) + "." + (bytes[4] & 0x0f);
-
             // the accumulation count is a 16-bit value
             AccumulationCount = (bytes[9] * 256) + bytes[10];
-
             // decode bits for error code byte
             TamperSinceLastReset = (bytes[2] >> 4) & 0x01;
             CurrentTamperState = (bytes[2] >> 3) & 0x01;
@@ -179,7 +161,6 @@ function Generic_Decoder(bytes , port) {
                 RadioCommError: RadioCommError,
                 Battery: BatteryLevel + "V"
             }}};
-
             break;
 
         // ==================   TAMPER EVENT    ====================
@@ -198,7 +179,6 @@ function Generic_Decoder(bytes , port) {
               Tamper: {
                 Event: TamperEvent
             }}};
-                
             break;
 
         // ==================   LINK QUALITY EVENT    ====================
@@ -232,15 +212,12 @@ function Generic_Decoder(bytes , port) {
 
         // ================  DOOR/WINDOW EVENT  ====================
         case DOOR_WINDOW_EVENT:
-
             EventType = bytes[2];
-
             // 0 is closed, 1 is open
             if (EventType == 0)
                 DoorEvent = "Closed";
             else
                 DoorEvent = "Open";
-
             decode = {data: { 
               Protocol: ProtocolVersion,
               Counter: PacketCounter,
@@ -252,9 +229,7 @@ function Generic_Decoder(bytes , port) {
 
         // ===============  PUSH BUTTON EVENT   ===================
         case PUSH_BUTTON_EVENT:
-
             EventType = Hex(bytes[2]);
-
             switch (EventType) {
                 // 01 and 02 used on two button
                 case "01": ButtonEvent = "Button 1"; break;
@@ -266,7 +241,6 @@ function Generic_Decoder(bytes , port) {
                 default:   ButtonEvent = "Undefined"; break;
             }
             SensorState = bytes[3];
-
             switch (SensorState) {
                 case 0:  ButtonState = "Pressed"; break;
                 case 1:  ButtonState = "Released"; break;
@@ -282,20 +256,17 @@ function Generic_Decoder(bytes , port) {
                 Event: ButtonEvent,
                 State: ButtonState,
             }}};
-
             break;
 
         // =================   CONTACT EVENT   =====================
         case CONTACT_EVENT:
-            
             EventType = bytes[2];
-
             // if state byte is 0 then shorted, if 1 then opened
             if (EventType == 0)
                 ContactEvent = "Contacts Shorted";
             else
                 ContactEvent = "Contacts Opened";
-                        
+                       
             decode = {data: {
               Protocol: ProtocolVersion,
               Counter: PacketCounter,
@@ -303,21 +274,17 @@ function Generic_Decoder(bytes , port) {
               Contact: {
                 Event: ContactEvent,
             }}};
-
             break;
 
         // ===================  WATER EVENT  =======================
         case WATER_EVENT:
-
             EventType = bytes[2];
-
             if (EventType == 0)
                 WaterEvent = "Water Present";
             else
                 WaterEvent = "Water Not Present";
 
             WaterRelative = bytes[3];
-
             decode = {data: {
               Protocol: ProtocolVersion,
               Counter: PacketCounter,
@@ -326,14 +293,11 @@ function Generic_Decoder(bytes , port) {
                 Event: WaterEvent,
                 Relative: WaterRelative,
             }}};
-
             break;
 
         // ================== TEMPERATURE EVENT ====================
         case TEMPERATURE_EVENT:
-
             EventType = bytes[2];
-
             switch (EventType) {
                 case 0:  TempEvent = "Periodic Report"; break;
                 case 1:  TempEvent = "Temperature Over Upper Threshold"; break;
@@ -342,10 +306,8 @@ function Generic_Decoder(bytes , port) {
                 case 4:  TempEvent = "Temperature Report-on-Change Decrease"; break;
                 default: TempEvent = "Undefined"; break;
             }
-
             // current temperature reading
             Temperature = Convert(bytes[3], 0);
-
             // relative temp measurement for use with an alternative calibration table
             TempRelative = Convert(bytes[4], 0);
 
@@ -358,14 +320,11 @@ function Generic_Decoder(bytes , port) {
                 Temperature: Temperature,
                 Relative: TempRelative,
             }}};
-
             break;
 
         // ====================  TILT EVENT  =======================
         case TILT_EVENT:
-
             EventType = bytes[2];
-
             switch (EventType) {
                 case 0:  TiltEvent = "Transitioned to Vertical"; break;
                 case 1:  TiltEvent = "Transitioned to Horizontal"; break;
@@ -373,7 +332,6 @@ function Generic_Decoder(bytes , port) {
                 case 3:  TiltEvent = "Report-on-Change Toward Horizontal"; break;
                 default: TiltEvent = "Undefined"; break;
             }
-
             TiltAngle = bytes[3];
 
             decode = {data: {
@@ -384,14 +342,11 @@ function Generic_Decoder(bytes , port) {
                 Event: TiltEvent,
                 Angle: TiltAngle,
             }}};
-
             break;
 
         // =============  AIR TEMP & HUMIDITY EVENT  ===============
         case ATH_EVENT:
-
             EventType = bytes[2];
-
             switch (EventType) {
                 case 0:  ATHEvent = "Periodic Report"; break;
                 case 1:  ATHEvent = "Temperature has Risen Above Upper Threshold"; break;
@@ -407,7 +362,6 @@ function Generic_Decoder(bytes , port) {
 
             // integer and fractional values between two bytes
             Temperature = Convert((bytes[3]) + ((bytes[4] >> 4) / 10), 1);
-
             // integer and fractional values between two bytes
             Humidity = +(bytes[5] + ((bytes[6]>>4) / 10)).toFixed(1);
 
@@ -420,14 +374,11 @@ function Generic_Decoder(bytes , port) {
                 Temperature: Temperature,
                 Humidity: Humidity
             }}};
-
             break;
 
         // ============  ACCELERATION MOVEMENT EVENT  ==============
         case ABM_EVENT:
-
             EventType = bytes[2];
-
             if (EventType == 0)
                 ABMEvent = "Movement Started";
             else
@@ -440,14 +391,11 @@ function Generic_Decoder(bytes , port) {
               ABM: {
                 Event: ABMEvent,
             }}};
-
             break;
 
         // =============  HIGH-PRECISION TILT EVENT  ===============
         case TILT_HP_EVENT:
-
             EventType = bytes[2];
-
             switch (EventType) {
                 case 0:  TiltHPEvent = "Periodic Report"; break;
                 case 1:  TiltHPEvent = "Transitioned Toward 0-Degree Vertical Orientation"; break;
@@ -456,12 +404,9 @@ function Generic_Decoder(bytes , port) {
                 case 4:  TiltHPEvent = "Report-on-Change Away From 0-Degree Vertical Orientation"; break;
                 default: TiltHPEvent = "Undefined"; break;
             }
-
             // integer and fractional values between two bytes
             TiltHPAngle = +(bytes[3] + (bytes[4] / 10)).toFixed(1);
-
             Temperature = Convert(bytes[5], 0);
-
             decode = {data: {
               Protocol: ProtocolVersion,
               Counter: PacketCounter,
@@ -471,14 +416,11 @@ function Generic_Decoder(bytes , port) {
                 Angle: TiltHPAngle,
                 Temperature: Temperature
             }}};
-
             break;
 
         // ===============  ULTRASONIC LEVEL EVENT  ================
         case ULTRASONIC_EVENT:
-
             EventType = bytes[2];
-
             switch (EventType) {
                 case 0:  UltrasonicEvent = "Periodic Report"; break;
                 case 1:  UltrasonicEvent = "Distance has Risen Above Upper Threshold"; break;
@@ -487,7 +429,6 @@ function Generic_Decoder(bytes , port) {
                 case 4:  UltrasonicEvent = "Report-on-Change Decrease"; break;
                 default: UltrasonicEvent = "Undefined"; break;
             }
-
             // distance is calculated across 16-bits
             Distance = ((bytes[3] * 256) + bytes[4]);
 
@@ -499,14 +440,11 @@ function Generic_Decoder(bytes , port) {
                 Event: UltrasonicEvent,
                 Distance: Distance,
             }}};
-
             break;
 
         // ================  4-20mA ANALOG EVENT  ==================
         case SENSOR420MA_EVENT:
-
             EventType = bytes[2];
-
             switch (EventType) {
               case 0:  A420mAEvent = "Periodic Report"; break;
               case 1:  A420mAEvent = "Analog Value has Risen Above Upper Threshold"; break;
@@ -515,7 +453,6 @@ function Generic_Decoder(bytes , port) {
               case 4:  A420mAEvent = "Report on Change Decrease"; break;
               default: A420mAEvent = "Undefined"; break;
             }
-
             // calculatec across 16-bits, convert from units of 10uA to mA
             Analog420mA = ((bytes[3] * 256) + bytes[4]) / 100;
 
@@ -527,14 +464,11 @@ function Generic_Decoder(bytes , port) {
                 Event: A420mAEvent,
                 Current: Analog420mA,
             }}};
-
             break;
 
         // =================  THERMOCOUPLE EVENT  ==================
         case THERMOCOUPLE_EVENT:
-
             EventType = bytes[2];
-
             switch (EventType) {
                 case 0:  ThermocoupleEvent = "Periodic Report"; break;
                 case 1:  ThermocoupleEvent = "Analog Value has Risen Above Upper Threshold"; break;
@@ -543,12 +477,9 @@ function Generic_Decoder(bytes , port) {
                 case 4:  ThermocoupleEvent = "Report on Change Decrease"; break;
                 default: ThermocoupleEvent = "Undefined"; break;
             }
-
             // decode is across 16-bits
             Temperature = parseInt(((bytes[3] * 256) + bytes[4]) / 16);
-
             Faults = bytes[5];
-
             // decode each bit in the fault byte
             FaultColdOutsideRange = (Faults >> 7) & 0x01;
             FaultHotOutsideRange = (Faults >> 6) & 0x01;
@@ -558,7 +489,6 @@ function Generic_Decoder(bytes , port) {
             FaultTCTooLow = (Faults >> 2) & 0x01;
             FaultVoltageOutsideRange = (Faults >> 1) & 0x01;
             FaultOpenCircuit = Faults & 0x01;
-
             // Decode faults
             if (FaultColdOutsideRange)    FaultCOR = "True"; else FaultCOR = "False";
             if (FaultHotOutsideRange)     FaultHOR = "True"; else FaultHOR = "False";
@@ -586,14 +516,11 @@ function Generic_Decoder(bytes , port) {
                   VoltageOutsideRange: FaultVOR,
                   OpenCircuit: FaultOPC
             }}}};
-
             break;
 
         // ================  VOLTMETER EVENT  ==================
         case VOLTMETER_EVENT:
-
             EventType = bytes[2];
-
             switch (EventType) {
                 case 0:  VoltmeterEvent = "Periodic Report"; break;
                 case 1:  VoltmeterEvent = "Voltage has Risen Above Upper Threshold"; break;
@@ -602,7 +529,6 @@ function Generic_Decoder(bytes , port) {
                 case 4:  VoltmeterEvent = "Report on Change Decrease"; break;
                 default: VoltmeterEvent = "Undefined";
             }
-
             // voltage is measured across 16-bits, convert from units of 10mV to V
             Voltage = ((bytes[3] * 256) + bytes[4]) / 100;
 
@@ -614,9 +540,7 @@ function Generic_Decoder(bytes , port) {
                 Event: VoltmeterEvent,
                 Voltage: Voltage,
             }}};
-
             break;
-
 
         // ================  CUSTOM SENSOR EVENT  ==================
         //case CUSTOM_SENSOR_EVENT:
@@ -627,17 +551,13 @@ function Generic_Decoder(bytes , port) {
 
         // ================  GPS EVENT  ==================
         case GPS_EVENT:
-
             EventType = bytes[2];
-
             // decode status byte
             GPSValidFix = EventType & 0x01;
-
             if (GPSValidFix == 0)
                 FixValid = "False";
             else
                 FixValid = "True";
-
             // latitude and longitude calculated across 32 bits each, show 12 decimal places
             Latitude = toFixed((((bytes[3] * (2 ^ 24)) + (bytes[4] * (2 ^ 16)) + (bytes[5] * (2 ^ 8)) + bytes[6]) / (10 ^ 7)), 12);
             Longitude = toFixed((((bytes[7] * (2 ^ 24)) + (bytes[8] * (2 ^ 16)) + (bytes[9] * (2 ^ 8)) + bytes[10]) / (10 ^ 7)), 12);
@@ -651,25 +571,20 @@ function Generic_Decoder(bytes , port) {
                 Latitude: Latitude,
                 Longitude: Longitude
             }}};
-
             break;
-
 
         // ================  HONEYWELL 5800 EVENT  ==================
         case HONEYWELL5800_EVENT:
-
             // honeywell sensor ID, 24-bits
             //HWSensorID = Hex((bytes[3] * (2 ^ 16)) + (bytes[4] * (2 ^ 8)) + bytes[5]);
             HWSensorID = Hex(bytes[3])+Hex(bytes[4])+Hex(bytes[5]);
             EventType = bytes[2];
-
             switch (EventType) {
                 case 0: HWEvent = "Status code"; break;
                 case 1: HWEvent = "Error Code"; break;
                 case 2: HWEvent = "Sensor Data Payload"; break;
                 default: HWEvent = "Undefined"; break;
             }
-
             // represent the honeywell sensor payload in hex
             HWPayload = Hex(bytes[6]);
 
@@ -682,7 +597,6 @@ function Generic_Decoder(bytes , port) {
                 Event: HWEvent,
                 Payload: HWPayload,
             }}};
-
             break;
 
         // ================  MAGNETOMETER EVENT  ==================
@@ -748,6 +662,7 @@ function Generic_Decoder(bytes , port) {
                 DownlinkEvent = "Message Invalid";
             else
                 DownlinkEvent = "Message Valid";
+
             decode = {data: {
               Protocol: ProtocolVersion,
               Counter: PacketCounter,
@@ -764,11 +679,8 @@ function Generic_Decoder(bytes , port) {
     decoded.Message += ", Packet Counter: " + PacketCounter;
     decoded.Message += ", Protocol Version: " + ProtocolVersion;
 
-//   return decoded object
-// return { data: { Message: decoded.Message } };  // OLD
+// return decoded object
   return decode;
-  
-
 }
 
 function Hex(decimal) {
