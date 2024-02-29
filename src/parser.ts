@@ -3,6 +3,7 @@ import { identifyEventType } from './lib/IdentifyEventType';
 import { hexToBinaryDecimal } from './lib/HexConvertor';
 import {
   AMBIENT_LIGHT_SENSOR,
+  COMPASS_SENSOR,
   CONTACT_SENSOR,
   DOOR_WINDOW_SENSOR,
   GLASS_BREAK_EVENT,
@@ -23,6 +24,7 @@ import SinglePushButton from './decoders/SinglePushButton';
 import TankLevelSensor from './decoders/TankLevelSensor';
 import AmbientLightSensor from './decoders/AmbientLightSensor';
 import WaterSensor from './decoders/WaterSensor';
+import CompassSensor from './decoders/CompassSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -78,6 +80,9 @@ class RadioBridgeDecoder {
         break;
       case WATER_SENSOR:
         data[WATER_SENSOR] = WaterSensor(hexDecimal);
+        break;
+      case COMPASS_SENSOR:
+        data[COMPASS_SENSOR] = CompassSensor(hexDecimal);
         break;
     }
 
