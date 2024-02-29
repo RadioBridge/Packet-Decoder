@@ -1,7 +1,4 @@
-import {
-  hexToBinaryMessageDecoder,
-  hexToDecimal,
-} from '../lib/HexConvertor';
+import { hexToBinaryMessageDecoder, hexToDecimal } from '../lib/HexConvertor';
 import { HexDecimal } from '../types';
 import { binaryStateDecode } from '../lib/CommonDecodings';
 

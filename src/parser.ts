@@ -5,6 +5,7 @@ import {
   CONTACT_SENSOR,
   DOOR_WINDOW_SENSOR,
   GLASS_BREAK_EVENT,
+  PUSH_BUTTON,
   RESET,
   SUPERVISORY,
   TAMPER,
@@ -15,6 +16,7 @@ import { reset, supervisory, tamperDetect } from './decoders/Common_Events';
 import DoorWindow from './decoders/DoorWindow';
 import GlassBreak from './decoders/GlassBreak';
 import ContactSensor from './decoders/ContactSensor';
+import SinglePushButton from './decoders/SinglePushButton';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -57,7 +59,10 @@ class RadioBridgeDecoder {
         data[CONTACT_SENSOR] = ContactSensor(hexDecimal);
         break;
       case TEMPERATURE_EVENT:
-        data = Temperature_Event(hexDecimal);
+        data[TEMPERATURE_EVENT] = Temperature_Event(hexDecimal);
+        break;
+      case PUSH_BUTTON:
+        data[PUSH_BUTTON] = SinglePushButton(hexDecimal);
         break;
     }
 
