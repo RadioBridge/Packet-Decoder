@@ -5,8 +5,11 @@ export default function (hexDecimal: [HexDecimal]) {
   const dataMessage = {};
   if (hexDecimal.length >= 1) {
     const byteZeroHex = hexDecimal[1];
-
-    dataMessage['event'] = binaryStateDecode(byteZeroHex);
+    const bitMsgs = {
+      0: 'Opened',
+      nobit: 'Closed',
+    };
+    dataMessage['event'] = binaryStateDecode(byteZeroHex, bitMsgs);
   }
 
   return dataMessage;

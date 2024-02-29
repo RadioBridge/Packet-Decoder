@@ -1,10 +1,9 @@
 import {
-  hexToBinaryDecimal,
   hexToBinaryMessageDecoder,
   hexToDecimal,
 } from '../lib/HexConvertor';
 import { HexDecimal } from '../types';
-import { SUPERVISORY, TAMPER } from '../types/EventTypes';
+import { binaryStateDecode } from '../lib/CommonDecodings';
 
 export function reset(hexDecimal: [HexDecimal]) {}
 
@@ -68,14 +67,12 @@ export function supervisory(hexDecimal: [HexDecimal]) {
 }
 
 export function tamperDetect(hexDecimal: [HexDecimal]) {
+  const byteZeroHex = hexDecimal[1];
+  const dataMessage = {};
   const bitMsgs = {
-    nobit: 'Open',
-    0: 'Closed',
+    0: 'Open',
+    nobit: 'Closed',
   };
-
-  return {
-    TAMPER: {
-      Event: hexToBinaryMessageDecoder(hexDecimal[0]['hex'] ?? '00', bitMsgs),
-    },
-  };
+  dataMessage['event'] = binaryStateDecode(byteZeroHex, bitMsgs);
+  return dataMessage;
 }

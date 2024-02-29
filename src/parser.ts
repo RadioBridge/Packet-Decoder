@@ -7,10 +7,11 @@ import {
   GLASS_BREAK_EVENT,
   RESET,
   SUPERVISORY,
+  TAMPER,
   TEMPERATURE_EVENT,
 } from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
-import { reset, supervisory } from './decoders/Common_Events';
+import { reset, supervisory, tamperDetect } from './decoders/Common_Events';
 import DoorWindow from './decoders/DoorWindow';
 import GlassBreak from './decoders/GlassBreak';
 import ContactSensor from './decoders/ContactSensor';
@@ -39,6 +40,9 @@ class RadioBridgeDecoder {
     switch (eventType) {
       case RESET:
         data = reset(hexDecimal);
+        break;
+      case TAMPER:
+        data[TAMPER] = tamperDetect(hexDecimal);
         break;
       case SUPERVISORY:
         data[SUPERVISORY] = supervisory(hexDecimal);
