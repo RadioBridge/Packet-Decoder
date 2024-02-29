@@ -1,7 +1,7 @@
 import { decode } from '../src/parser';
 import { TANK_LEVEL_SENSOR } from '../src/types/EventTypes';
 
-describe('unit | ContactSensorEvent', () => {
+describe('unit | TankLevelSensor', () => {
   it.each([
     ['opened', '180C01', 'Tank empty'],
     ['shorted', '170C00', 'Tank full'],

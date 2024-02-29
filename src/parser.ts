@@ -2,6 +2,7 @@ import { DecodedPayload, HexDecimal } from './types';
 import { identifyEventType } from './lib/IdentifyEventType';
 import { hexToBinaryDecimal } from './lib/HexConvertor';
 import {
+  AMBIENT_LIGHT_SENSOR,
   CONTACT_SENSOR,
   DOOR_WINDOW_SENSOR,
   GLASS_BREAK_EVENT,
@@ -19,6 +20,7 @@ import GlassBreak from './decoders/GlassBreak';
 import ContactSensor from './decoders/ContactSensor';
 import SinglePushButton from './decoders/SinglePushButton';
 import TankLevelSensor from './decoders/TankLevelSensor';
+import AmbientLightSensor from './decoders/AmbientLightSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -68,6 +70,9 @@ class RadioBridgeDecoder {
         break;
       case TANK_LEVEL_SENSOR:
         data[TANK_LEVEL_SENSOR] = TankLevelSensor(hexDecimal);
+        break;
+      case AMBIENT_LIGHT_SENSOR:
+        data[AMBIENT_LIGHT_SENSOR] = AmbientLightSensor(hexDecimal);
         break;
     }
 
