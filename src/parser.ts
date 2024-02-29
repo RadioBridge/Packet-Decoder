@@ -1,9 +1,15 @@
 import { DecodedPayload, HexDecimal } from './types';
 import { identifyEventType } from './lib/IdentifyEventType';
 import { hexToBinaryDecimal } from './lib/HexConvertor';
-import { RESET, SUPERVISORY, TEMPERATURE_EVENT } from './types/EventTypes';
+import {
+  DOOR_WINDOW_SENSOR,
+  RESET,
+  SUPERVISORY,
+  TEMPERATURE_EVENT,
+} from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
 import { reset, supervisory } from './decoders/Common_Events';
+import DoorWindow from './decoders/DoorWindow';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -25,13 +31,16 @@ class RadioBridgeDecoder {
   }
 
   mapConversion(eventType: string, hexDecimal: Array<HexDecimal>) {
-    let data;
+    let data = {};
     switch (eventType) {
       case RESET:
         data = reset(hexDecimal);
         break;
       case SUPERVISORY:
-        data = supervisory(hexDecimal);
+        data[SUPERVISORY] = supervisory(hexDecimal);
+        break;
+      case DOOR_WINDOW_SENSOR:
+        data[DOOR_WINDOW_SENSOR] = DoorWindow(hexDecimal);
         break;
       case TEMPERATURE_EVENT:
         data = Temperature_Event(hexDecimal);

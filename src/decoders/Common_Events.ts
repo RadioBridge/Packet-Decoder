@@ -11,7 +11,6 @@ export function reset(hexDecimal: [HexDecimal]) {}
 export function supervisory(hexDecimal: [HexDecimal]) {
   // Below array defines what each bit represents in message if it is set to 1
   const supervisoryDecode = {};
-  supervisoryDecode[SUPERVISORY] = {};
   // removing zero byte because this represents sensor message type
   hexDecimal.splice(0, 1);
 
@@ -29,7 +28,7 @@ export function supervisory(hexDecimal: [HexDecimal]) {
     );
     if (typeof commonDecoded !== 'string') {
       bitsMsgs.forEach((item) => {
-        supervisoryDecode[SUPERVISORY][item] = commonDecoded.indexOf(item) > -1;
+        supervisoryDecode[item] = commonDecoded.indexOf(item) > -1;
       });
     }
   }
@@ -42,7 +41,7 @@ export function supervisory(hexDecimal: [HexDecimal]) {
       'Z-axis over threshold',
       'Settling window time expired',
     ];
-    supervisoryDecode[SUPERVISORY]['threshold'] = hexToBinaryMessageDecoder(
+    supervisoryDecode['threshold'] = hexToBinaryMessageDecoder(
       byteOne['hex'],
       bitMsgs,
       'string',
@@ -51,7 +50,7 @@ export function supervisory(hexDecimal: [HexDecimal]) {
 
   const batteryLevelIndex = 2;
   if (batteryLevelIndex in hexDecimal) {
-    supervisoryDecode[SUPERVISORY]['battery'] =
+    supervisoryDecode['battery'] =
       Number(parseInt(hexDecimal[batteryLevelIndex]['hex']) / 10).toFixed(1) +
       'V';
   }
@@ -60,7 +59,7 @@ export function supervisory(hexDecimal: [HexDecimal]) {
    * Event accumulation count, Byte 7-8
    */
   if (7 in hexDecimal && 8 in hexDecimal) {
-    supervisoryDecode[SUPERVISORY]['accumulationCount'] = hexToDecimal(
+    supervisoryDecode['accumulationCount'] = hexToDecimal(
       hexDecimal[7]['hex'] + hexDecimal[8]['hex'],
     );
   }
