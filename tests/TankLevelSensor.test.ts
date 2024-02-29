@@ -1,14 +1,14 @@
 import { decode } from '../src/parser';
-import { CONTACT_SENSOR } from '../src/types/EventTypes';
+import { TANK_LEVEL_SENSOR } from '../src/types/EventTypes';
 
 describe('unit | ContactSensorEvent', () => {
   it.each([
-    ['opened', '180701', 'Opened'],
-    ['shorted', '170700', 'Shorted'],
+    ['opened', '180C01', 'Tank empty'],
+    ['shorted', '170C00', 'Tank full'],
   ])('decodes a contact %s event', (description, payload, expectedState) => {
     const decodedData = decode(payload);
     const expectedOutput = {};
-    expectedOutput[CONTACT_SENSOR] = {
+    expectedOutput[TANK_LEVEL_SENSOR] = {
       event: expectedState,
     };
     expect(decodedData).toMatchObject(expectedOutput);

@@ -19,10 +19,15 @@ export function hexToBinaryDecimal(data: string): [HexDecimal] {
   return hexDecimalBinary;
 }
 
-function baseConvert(data: string | number, fromBase: number, toBase: number) {
+export function baseConvert(
+  data: string | number,
+  fromBase: number,
+  toBase: number,
+) {
   let num = data;
-  if (typeof data !== 'number') {
-    num = parseInt(data as string, 10);
+  if (isNaN(<number>data)) {
+    num = parseInt(data as string, fromBase);
+    fromBase = 10;
   }
   return parseInt(num + '', fromBase | 0).toString(toBase | 0);
 }

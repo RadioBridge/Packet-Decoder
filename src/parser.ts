@@ -9,6 +9,7 @@ import {
   RESET,
   SUPERVISORY,
   TAMPER,
+  TANK_LEVEL_SENSOR,
   TEMPERATURE_EVENT,
 } from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
@@ -17,6 +18,7 @@ import DoorWindow from './decoders/DoorWindow';
 import GlassBreak from './decoders/GlassBreak';
 import ContactSensor from './decoders/ContactSensor';
 import SinglePushButton from './decoders/SinglePushButton';
+import TankLevelSensor from './decoders/TankLevelSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -63,6 +65,9 @@ class RadioBridgeDecoder {
         break;
       case PUSH_BUTTON:
         data[PUSH_BUTTON] = SinglePushButton(hexDecimal);
+        break;
+      case TANK_LEVEL_SENSOR:
+        data[TANK_LEVEL_SENSOR] = TankLevelSensor(hexDecimal);
         break;
     }
 
