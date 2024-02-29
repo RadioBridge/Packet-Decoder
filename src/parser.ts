@@ -2,7 +2,9 @@ import { DecodedPayload, HexDecimal } from './types';
 import { identifyEventType } from './lib/IdentifyEventType';
 import { hexToBinaryDecimal } from './lib/HexConvertor';
 import {
+  CONTACT_SENSOR,
   DOOR_WINDOW_SENSOR,
+  GLASS_BREAK_EVENT,
   RESET,
   SUPERVISORY,
   TEMPERATURE_EVENT,
@@ -10,6 +12,8 @@ import {
 import Temperature_Event from './decoders/Temperature_Event';
 import { reset, supervisory } from './decoders/Common_Events';
 import DoorWindow from './decoders/DoorWindow';
+import GlassBreak from './decoders/GlassBreak';
+import ContactSensor from './decoders/ContactSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -41,6 +45,12 @@ class RadioBridgeDecoder {
         break;
       case DOOR_WINDOW_SENSOR:
         data[DOOR_WINDOW_SENSOR] = DoorWindow(hexDecimal);
+        break;
+      case GLASS_BREAK_EVENT:
+        data[GLASS_BREAK_EVENT] = GlassBreak();
+        break;
+      case CONTACT_SENSOR:
+        data[CONTACT_SENSOR] = ContactSensor(hexDecimal);
         break;
       case TEMPERATURE_EVENT:
         data = Temperature_Event(hexDecimal);
