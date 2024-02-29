@@ -12,6 +12,7 @@ import {
   TAMPER,
   TANK_LEVEL_SENSOR,
   TEMPERATURE_EVENT,
+  WATER_SENSOR,
 } from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
 import { reset, supervisory, tamperDetect } from './decoders/Common_Events';
@@ -21,6 +22,7 @@ import ContactSensor from './decoders/ContactSensor';
 import SinglePushButton from './decoders/SinglePushButton';
 import TankLevelSensor from './decoders/TankLevelSensor';
 import AmbientLightSensor from './decoders/AmbientLightSensor';
+import WaterSensor from './decoders/WaterSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -73,6 +75,9 @@ class RadioBridgeDecoder {
         break;
       case AMBIENT_LIGHT_SENSOR:
         data[AMBIENT_LIGHT_SENSOR] = AmbientLightSensor(hexDecimal);
+        break;
+      case WATER_SENSOR:
+        data[WATER_SENSOR] = WaterSensor(hexDecimal);
         break;
     }
 
