@@ -1,5 +1,5 @@
 import { decode } from '../src/parser';
-import { RESET, SUPERVISORY, TAMPER } from '../src/types/EventTypes';
+import { DOWNLINK, RESET, SUPERVISORY, TAMPER } from '../src/types/EventTypes';
 
 describe('unit | supervisoryEvent', () => {
   it.each([
@@ -56,6 +56,37 @@ describe('unit | supervisoryEvent', () => {
       expectedOutput[RESET] = {
         hardwareVersion,
         firmwareVersion,
+      };
+      expect(decodedData).toMatchObject(expectedOutput);
+    },
+  );
+
+  /**
+   * Downlink events
+   */
+  it.each([
+    ['DW: Invalid', '17ff01', 'Invalid', null],
+    [
+      'Misc error in DOWNLINK',
+      '18ff0d0600080708070800',
+      'Misc error in DOWNLINK',
+      '06 00 08 07 08 07 08 00',
+    ],
+    ['DW: Msg Valid', '15ff02', 'Msg Valid', null],
+    [
+      'Msg Valid - No Errors',
+      '16ff0311019e0000000000',
+      'Msg Valid - No Errors',
+      '11 01 9E 00 00 00 00 00',
+    ],
+  ])(
+    'decodes a Downlink: %s event',
+    (description, supervisoryPayload, expectedEvent, extendedBytes) => {
+      const decodedData = decode(supervisoryPayload);
+      const expectedOutput = {};
+      expectedOutput[DOWNLINK] = {
+        extendedBytes,
+        event: expectedEvent,
       };
       expect(decodedData).toMatchObject(expectedOutput);
     },

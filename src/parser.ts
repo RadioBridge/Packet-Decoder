@@ -6,6 +6,7 @@ import {
   COMPASS_SENSOR,
   CONTACT_SENSOR,
   DOOR_WINDOW_SENSOR,
+  DOWNLINK,
   GLASS_BREAK_EVENT,
   PUSH_BUTTON,
   RESET,
@@ -16,7 +17,12 @@ import {
   WATER_SENSOR,
 } from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
-import { reset, supervisory, tamperDetect } from './decoders/Common_Events';
+import {
+  downlink,
+  reset,
+  supervisory,
+  tamperDetect,
+} from './decoders/Common_Events';
 import DoorWindow from './decoders/DoorWindow';
 import GlassBreak from './decoders/GlassBreak';
 import ContactSensor from './decoders/ContactSensor';
@@ -50,6 +56,9 @@ class RadioBridgeDecoder {
     switch (eventType) {
       case RESET:
         data[RESET] = reset(hexDecimal);
+        break;
+      case DOWNLINK:
+        data[DOWNLINK] = downlink(hexDecimal);
         break;
       case TAMPER:
         data[TAMPER] = tamperDetect(hexDecimal);

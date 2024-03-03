@@ -2,6 +2,7 @@ import {
   binaryToDecimal,
   hexToBinaryMessageDecoder,
   hexToDecimal,
+  hexToDecimalMessageDecoder,
 } from '../lib/HexConvertor';
 import { HexDecimal } from '../types';
 import { binaryStateDecode } from '../lib/CommonDecodings';
@@ -76,6 +77,10 @@ export function tamperDetect(hexDecimal: [HexDecimal]) {
   return dataMessage;
 }
 
+/**
+ * Decodes reset events
+ * @param hexDecimal
+ */
 export function reset(hexDecimal: [HexDecimal]) {
   let hardwareVersion, firmwareVersion;
   if (hexDecimal.length >= 5) {
@@ -113,4 +118,41 @@ export function reset(hexDecimal: [HexDecimal]) {
     hardwareVersion: hardwareVersion,
     firmwareVersion: firmwareVersion,
   };
+}
+
+/**
+ * Decodes downlink events
+ * @param hexDecimal
+ */
+export function downlink(hexDecimal: [HexDecimal]) {
+  const byteZeroDecimal = hexDecimal[1]['decimal'];
+  const dataMessage = {};
+  const bitMsgs = {
+    nobit: 'No Message Received',
+    1: 'Invalid',
+    2: 'Msg Valid',
+    3: 'Msg Valid - No Errors',
+    4: 'Invalid - Command not supported',
+    5: 'Invalid - reserved bits and bytes of downlink must be zero',
+    6: 'Invalid - byte value of downlink is not in range',
+    7: 'Invalid - unsupported DOWNLINK option byte',
+    8: "Invalid - this lora zone doesn't support confirmed uplink messages",
+    9: 'Invalid - for confirmed messages, no more than 8 retries are allowed',
+    10: 'Invalid - for unconfirmed messages, no more than 1 retry is allowed',
+    11: 'valid port range for lora is 1 - 223, 0 means leave it default',
+    12: 'The DOWNLINK is for a Sensor type not supported on this Device',
+    13: 'Misc error in DOWNLINK',
+    14: 'Invalid - Link Quality period should be greater than 60 Minutes',
+  };
+  dataMessage['event'] = hexToDecimalMessageDecoder(byteZeroDecimal, bitMsgs);
+  dataMessage['extendedBytes'] = null;
+  if (hexDecimal[1]['decimal'] > 2) {
+    // Extended downlink of 11 bytes
+    const downlinkMsg = [];
+    for (let i = 2; i < hexDecimal.length; i++) {
+      downlinkMsg.push(hexDecimal[i]['hex'].toUpperCase());
+    }
+    dataMessage['extendedBytes'] = downlinkMsg.join(' ');
+  }
+  return dataMessage;
 }
