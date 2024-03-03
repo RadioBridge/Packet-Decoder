@@ -1,5 +1,5 @@
 import { decode } from '../src/parser';
-import { SUPERVISORY, TAMPER } from '../src/types/EventTypes';
+import { RESET, SUPERVISORY, TAMPER } from '../src/types/EventTypes';
 
 describe('unit | supervisoryEvent', () => {
   it.each([
@@ -36,6 +36,26 @@ describe('unit | supervisoryEvent', () => {
       const expectedOutput = {};
       expectedOutput[TAMPER] = {
         event: expectedState,
+      };
+      expect(decodedData).toMatchObject(expectedOutput);
+    },
+  );
+
+  /**
+   * Reset events
+   */
+  it.each([
+    ['HW: 2.2, FM: 2.5.13', '10000a2288ad703c', '2.2', '2.5.13'],
+    ['HW: 1.0, FM: 1.6', '100006100106181e', '1.0', '1.6'],
+    ['HW: 2.7, FM: 2.2.16', '100011278850703c', '2.7', '2.2.16'],
+  ])(
+    'decodes a RESET: %s event',
+    (description, supervisoryPayload, hardwareVersion, firmwareVersion) => {
+      const decodedData = decode(supervisoryPayload);
+      const expectedOutput = {};
+      expectedOutput[RESET] = {
+        hardwareVersion,
+        firmwareVersion,
       };
       expect(decodedData).toMatchObject(expectedOutput);
     },

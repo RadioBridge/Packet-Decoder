@@ -46,10 +46,10 @@ class RadioBridgeDecoder {
   }
 
   mapConversion(eventType: string, hexDecimal: Array<HexDecimal>) {
-    let data = {};
+    const data = {};
     switch (eventType) {
       case RESET:
-        data = reset(hexDecimal);
+        data[RESET] = reset(hexDecimal);
         break;
       case TAMPER:
         data[TAMPER] = tamperDetect(hexDecimal);

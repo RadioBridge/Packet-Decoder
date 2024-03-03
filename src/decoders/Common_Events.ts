@@ -1,8 +1,10 @@
-import { hexToBinaryMessageDecoder, hexToDecimal } from '../lib/HexConvertor';
+import {
+  binaryToDecimal,
+  hexToBinaryMessageDecoder,
+  hexToDecimal,
+} from '../lib/HexConvertor';
 import { HexDecimal } from '../types';
 import { binaryStateDecode } from '../lib/CommonDecodings';
-
-export function reset(hexDecimal: [HexDecimal]) {}
 
 export function supervisory(hexDecimal: [HexDecimal]) {
   // Below array defines what each bit represents in message if it is set to 1
@@ -72,4 +74,43 @@ export function tamperDetect(hexDecimal: [HexDecimal]) {
   };
   dataMessage['event'] = binaryStateDecode(byteZeroHex, bitMsgs);
   return dataMessage;
+}
+
+export function reset(hexDecimal: [HexDecimal]) {
+  let hardwareVersion, firmwareVersion;
+  if (hexDecimal.length >= 5) {
+    const hardwareVersionByte = hexDecimal[2];
+    const hardwareVersionMajorVer = hardwareVersionByte['hex'][0];
+    const hardwareVersionMinorVer = hardwareVersionByte['hex'][1];
+
+    const firmwareByteOne: string = hexDecimal[3]['binary'];
+    const firmwareByteTwo: string = hexDecimal[4]['binary'];
+    if (firmwareByteOne[0] == 1) {
+      const finalString = firmwareByteOne.slice(1) + firmwareByteTwo;
+      const decodedVersions = finalString.split(/(.{5})/).filter((O) => O);
+      firmwareVersion =
+        binaryToDecimal(decodedVersions[0]) +
+        '.' +
+        binaryToDecimal(decodedVersions[1]) +
+        '.' +
+        binaryToDecimal(decodedVersions[2]);
+    } else {
+      firmwareVersion =
+        255 == hexDecimal[3]['decimal'] || 0 == hexDecimal[3]['decimal']
+          ? '-'
+          : hexDecimal[3]['decimal'] + '.' + hexDecimal[4]['decimal'];
+    }
+
+    hardwareVersion =
+      255 == hardwareVersionByte['decimal'] ||
+      0 == hardwareVersionByte['decimal']
+        ? '-'
+        : hexToDecimal(hardwareVersionMajorVer) +
+          '.' +
+          hexToDecimal(hardwareVersionMinorVer);
+  }
+  return {
+    hardwareVersion: hardwareVersion,
+    firmwareVersion: firmwareVersion,
+  };
 }
