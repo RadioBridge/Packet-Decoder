@@ -1,5 +1,12 @@
 import { decode } from '../src/parser';
-import { DOWNLINK, RESET, SUPERVISORY, TAMPER } from '../src/types/EventTypes';
+import {
+  DEVICE_INFO,
+  DOWNLINK,
+  LINK_QUALITY,
+  RESET,
+  SUPERVISORY,
+  TAMPER,
+} from '../src/types/EventTypes';
 
 describe('unit | supervisoryEvent', () => {
   it.each([
@@ -7,8 +14,8 @@ describe('unit | supervisoryEvent', () => {
     ['with 2.7v', '1c01030127000000000000', '2.7V'],
   ])(
     'decodes a supervisory event %s',
-    (description, supervisoryPayload, batteryVoltage) => {
-      const decodedData = decode(supervisoryPayload);
+    (description, payload, batteryVoltage) => {
+      const decodedData = decode(payload);
       const expectedOutput = {};
       expectedOutput[SUPERVISORY] = {
         BatteryLow: true,
@@ -29,17 +36,14 @@ describe('unit | supervisoryEvent', () => {
   it.each([
     ['Open', '190201', 'Open'],
     ['Closed', '180200', 'Closed'],
-  ])(
-    'decodes a tamper %s event',
-    (description, supervisoryPayload, expectedState) => {
-      const decodedData = decode(supervisoryPayload);
-      const expectedOutput = {};
-      expectedOutput[TAMPER] = {
-        event: expectedState,
-      };
-      expect(decodedData).toMatchObject(expectedOutput);
-    },
-  );
+  ])('decodes a tamper %s event', (description, payload, expectedState) => {
+    const decodedData = decode(payload);
+    const expectedOutput = {};
+    expectedOutput[TAMPER] = {
+      event: expectedState,
+    };
+    expect(decodedData).toMatchObject(expectedOutput);
+  });
 
   /**
    * Reset events
@@ -50,8 +54,8 @@ describe('unit | supervisoryEvent', () => {
     ['HW: 2.7, FM: 2.2.16', '100011278850703c', '2.7', '2.2.16'],
   ])(
     'decodes a RESET: %s event',
-    (description, supervisoryPayload, hardwareVersion, firmwareVersion) => {
-      const decodedData = decode(supervisoryPayload);
+    (description, payload, hardwareVersion, firmwareVersion) => {
+      const decodedData = decode(payload);
       const expectedOutput = {};
       expectedOutput[RESET] = {
         hardwareVersion,
@@ -81,12 +85,70 @@ describe('unit | supervisoryEvent', () => {
     ],
   ])(
     'decodes a Downlink: %s event',
-    (description, supervisoryPayload, expectedEvent, extendedBytes) => {
-      const decodedData = decode(supervisoryPayload);
+    (description, payload, expectedEvent, extendedBytes) => {
+      const decodedData = decode(payload);
       const expectedOutput = {};
       expectedOutput[DOWNLINK] = {
         extendedBytes,
         event: expectedEvent,
+      };
+      expect(decodedData).toMatchObject(expectedOutput);
+    },
+  );
+
+  /**
+   * linkQuality events
+   */
+  it.each([
+    ['RSSI: -71, SNR: 6', '1bfb01b906', -71, 6],
+    ['RSSI: -45, SNR: 7', '12fb00d307', -45, 7],
+    ['RSSI: -67, SNR: 8', '14fb00bd08', -67, 8],
+  ])(
+    'decodes a linkQuality event %s',
+    (description, payload: string, rssi, snr) => {
+      const decodedData = decode(payload);
+      const expectedOutput = {};
+      expectedOutput[LINK_QUALITY] = {
+        rssi: rssi,
+        snr: snr,
+      };
+      expect(decodedData).toMatchObject(expectedOutput);
+    },
+  );
+
+  /**
+   * Device info events
+   */
+  it.each([
+    [
+      'Device Info Message 1 of 1',
+      '13fa11fc00010100000000',
+      'Device Info Message 1 of 1',
+      'DOWNLINK_ADVANCED',
+      '00 01 01 00 00 00 00',
+    ],
+    [
+      'Device Info Message 2 of 2',
+      '12fa22fc00010100000000',
+      'Device Info Message 2 of 2',
+      'DOWNLINK_ADVANCED',
+      '00 01 01 00 00 00 00',
+    ],
+  ])(
+    'decodes a deviceInfo event %s',
+    (
+      description,
+      payload: string,
+      expectedEvent,
+      packetType,
+      downlinkBytes,
+    ) => {
+      const decodedData = decode(payload);
+      const expectedOutput = {};
+      expectedOutput[DEVICE_INFO] = {
+        event: expectedEvent,
+        packetType,
+        downlinkBytes,
       };
       expect(decodedData).toMatchObject(expectedOutput);
     },

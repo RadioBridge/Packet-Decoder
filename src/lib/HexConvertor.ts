@@ -76,7 +76,7 @@ export function signedHexToDecimal(hexNumber: string, binaryDigits = 8) {
     decimal = binaryToDecimal(binary);
   }
 
-  return decimal;
+  return Number(decimal);
 }
 
 function hexToBinary(hex: string, binaryDigits: number) {

@@ -3,6 +3,7 @@ import {
   hexToBinaryMessageDecoder,
   hexToDecimal,
   hexToDecimalMessageDecoder,
+  signedHexToDecimal,
 } from '../lib/HexConvertor';
 import { HexDecimal } from '../types';
 import { binaryStateDecode } from '../lib/CommonDecodings';
@@ -155,4 +156,91 @@ export function downlink(hexDecimal: [HexDecimal]) {
     dataMessage['extendedBytes'] = downlinkMsg.join(' ');
   }
   return dataMessage;
+}
+
+/**
+ * Test event
+ */
+export function testEvent() {
+  return { TEST_EVENT: 'Test Event' };
+}
+
+/**
+ * Link quality
+ * @param hexDecimal
+ */
+export function linkQuality(hexDecimal: [HexDecimal]) {
+  const rssiValue = signedHexToDecimal(hexDecimal[2]['hex']);
+  const snrValue = signedHexToDecimal(hexDecimal[3]['hex']);
+  return { rssi: rssiValue, snr: snrValue };
+}
+
+/**
+ * Rate limit exceeded
+ */
+export function rateLimitExceeded() {
+  return { event: 'Rate limit exceeded' };
+}
+
+/**
+ * Manufacturing test message
+ */
+export function manufacturingTestMessage() {
+  return { event: 'Manufacturing test message' };
+}
+
+/**
+ * Device info
+ * @param hexDecimal
+ */
+export function deviceInfo(hexDecimal: [HexDecimal]) {
+  let subDataMessage = '';
+
+  let checkIfAllFF = false;
+  let packetType = null;
+  const downlinkBytes = [];
+  for (let i = 1; i < hexDecimal.length; i++) {
+    if (255 != hexDecimal[i]['decimal']) {
+      checkIfAllFF = false;
+      break;
+    }
+  }
+
+  if (!checkIfAllFF) {
+    const totalPackets = binaryToDecimal(hexDecimal[1]['binary'].slice(-4));
+    const curPacketCount = binaryToDecimal(hexDecimal[1]['binary'].slice(0, 4));
+
+    if (curPacketCount > totalPackets) {
+      switch (hexDecimal[1]['decimal']) {
+        case 16:
+          packetType = 'CONFIG';
+          break;
+        case 32:
+          packetType = 'MFG_LOT';
+          break;
+      }
+    } else {
+      subDataMessage = curPacketCount + ' of ' + totalPackets;
+      switch (hexDecimal[2]['decimal']) {
+        case 252:
+          packetType = 'DOWNLINK_ADVANCED';
+          break;
+        case 1:
+          packetType = 'DOWNLINK_GENERAL';
+          break;
+      }
+    }
+
+    for (let i = 3; i < hexDecimal.length; i++) {
+      downlinkBytes.push(hexDecimal[i]['hex'].toUpperCase());
+    }
+  } else {
+    subDataMessage = '\nDownlink Not Initialized Yet';
+  }
+
+  return {
+    event: 'Device Info Message ' + subDataMessage,
+    packetType,
+    downlinkBytes: downlinkBytes.join(' '),
+  };
 }

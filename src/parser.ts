@@ -5,23 +5,33 @@ import {
   AMBIENT_LIGHT_SENSOR,
   COMPASS_SENSOR,
   CONTACT_SENSOR,
+  DEVICE_INFO,
   DOOR_WINDOW_SENSOR,
   DOWNLINK,
   GLASS_BREAK_EVENT,
+  LINK_QUALITY,
   PUSH_BUTTON,
+  RATE_LIMIT_EXCEEDED,
   RESET,
   SUPERVISORY,
   TAMPER,
   TANK_LEVEL_SENSOR,
   TEMPERATURE_EVENT,
+  TEST_MESSAGE,
+  TEST_MODE_EXIT,
   WATER_SENSOR,
 } from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
 import {
+  deviceInfo,
   downlink,
+  linkQuality,
+  manufacturingTestMessage,
+  rateLimitExceeded,
   reset,
   supervisory,
   tamperDetect,
+  testEvent,
 } from './decoders/Common_Events';
 import DoorWindow from './decoders/DoorWindow';
 import GlassBreak from './decoders/GlassBreak';
@@ -65,6 +75,21 @@ class RadioBridgeDecoder {
         break;
       case SUPERVISORY:
         data[SUPERVISORY] = supervisory(hexDecimal);
+        break;
+      case TEST_MESSAGE:
+        data[TEST_MESSAGE] = testEvent();
+        break;
+      case LINK_QUALITY:
+        data[LINK_QUALITY] = linkQuality(hexDecimal);
+        break;
+      case RATE_LIMIT_EXCEEDED:
+        data[RATE_LIMIT_EXCEEDED] = rateLimitExceeded();
+        break;
+      case TEST_MODE_EXIT:
+        data[TEST_MODE_EXIT] = manufacturingTestMessage();
+        break;
+      case DEVICE_INFO:
+        data[DEVICE_INFO] = deviceInfo(hexDecimal);
         break;
       case DOOR_WINDOW_SENSOR:
         data[DOOR_WINDOW_SENSOR] = DoorWindow(hexDecimal);
