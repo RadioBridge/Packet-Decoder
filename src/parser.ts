@@ -2,6 +2,7 @@ import { DecodedPayload, HexDecimal } from './types';
 import { identifyEventType } from './lib/IdentifyEventType';
 import { hexToBinaryDecimal } from './lib/HexConvertor';
 import {
+  ACCELERATION_MOVEMENT_SENSOR,
   AMBIENT_LIGHT_SENSOR,
   COMPASS_SENSOR,
   CONTACT_SENSOR,
@@ -9,6 +10,7 @@ import {
   DOOR_WINDOW_SENSOR,
   DOWNLINK,
   GLASS_BREAK_EVENT,
+  GPS_SENSOR,
   LINK_QUALITY,
   PUSH_BUTTON,
   RATE_LIMIT_EXCEEDED,
@@ -41,6 +43,8 @@ import TankLevelSensor from './decoders/TankLevelSensor';
 import AmbientLightSensor from './decoders/AmbientLightSensor';
 import WaterSensor from './decoders/WaterSensor';
 import CompassSensor from './decoders/CompassSensor';
+import GpsDevice from './decoders/GpsDevice';
+import AccelerationMovementSensor from './decoders/AccelerationMovementSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -117,6 +121,13 @@ class RadioBridgeDecoder {
         break;
       case COMPASS_SENSOR:
         data[COMPASS_SENSOR] = CompassSensor(hexDecimal);
+        break;
+      case GPS_SENSOR:
+        data[GPS_SENSOR] = GpsDevice(hexDecimal);
+        break;
+      case ACCELERATION_MOVEMENT_SENSOR:
+        data[ACCELERATION_MOVEMENT_SENSOR] =
+          AccelerationMovementSensor(hexDecimal);
         break;
     }
 
