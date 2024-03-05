@@ -3,6 +3,7 @@ import { identifyEventType } from './lib/IdentifyEventType';
 import { hexToBinaryDecimal } from './lib/HexConvertor';
 import {
   ACCELERATION_MOVEMENT_SENSOR,
+  AIR_TEMP_HUMIDITY_SENSOR,
   AMBIENT_LIGHT_SENSOR,
   COMPASS_SENSOR,
   CONTACT_SENSOR,
@@ -14,6 +15,7 @@ import {
   HB_VIBRATION_SENSOR,
   HIGH_PRECISION_TILT_SENSOR,
   HONEYWELL_5800,
+  INTERNAL_TEMPERATURE,
   LINK_QUALITY,
   MAGNETOMETER_SENSOR,
   PUSH_BUTTON,
@@ -57,6 +59,7 @@ import GpsDevice from './decoders/GpsDevice';
 import AccelerationMovementSensor from './decoders/AccelerationMovementSensor';
 import TiltSensor from './decoders/TiltSensor';
 import VoltageSensor from './decoders/VoltageSensor';
+import AirTemperatureAndHumiditySensor from './decoders/AirTemperatureAndHumiditySensor';
 import HoneywellFiveEightZeroZero from './decoders/HoneywellFiveEightZeroZero';
 import HighPrecisionTiltSensor from './decoders/HighPrecisionTiltSensor';
 import UltraSonicSensor from './decoders/UltraSonicSensor';
@@ -179,6 +182,14 @@ class RadioBridgeDecoder {
         break;
       case HB_VIBRATION_SENSOR:
         data[HB_VIBRATION_SENSOR] = HBVibrationSensor(hexDecimal);
+        break;
+      case AIR_TEMP_HUMIDITY_SENSOR:
+        data[AIR_TEMP_HUMIDITY_SENSOR] =
+          AirTemperatureAndHumiditySensor(hexDecimal);
+        break;
+      case INTERNAL_TEMPERATURE:
+        data[INTERNAL_TEMPERATURE] =
+          AirTemperatureAndHumiditySensor(hexDecimal);
         break;
     }
 
