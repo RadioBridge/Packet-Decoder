@@ -15,6 +15,7 @@ import {
   HIGH_PRECISION_TILT_SENSOR,
   HONEYWELL_5800,
   LINK_QUALITY,
+  MAGNETOMETER_SENSOR,
   PUSH_BUTTON,
   RATE_LIMIT_EXCEEDED,
   RESET,
@@ -63,6 +64,7 @@ import HBVibrationSensor from './decoders/HBVibrationSensor';
 import CurrentLoopSensor from './decoders/CurrentLoopSensor';
 import ThermocoupleTemperatureSensor from './decoders/ThermocoupleTemperatureSensor';
 import WeatherStationSensor from './decoders/WeatherStationSensor';
+import MagnetometerSensor from './decoders/MagnetometerSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -171,6 +173,9 @@ class RadioBridgeDecoder {
         break;
       case WEATHER_STATION:
         data[WEATHER_STATION] = WeatherStationSensor(hexDecimal);
+        break;
+      case MAGNETOMETER_SENSOR:
+        data[MAGNETOMETER_SENSOR] = MagnetometerSensor(hexDecimal);
         break;
       case HB_VIBRATION_SENSOR:
         data[HB_VIBRATION_SENSOR] = HBVibrationSensor(hexDecimal);
