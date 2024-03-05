@@ -28,6 +28,7 @@ import {
   ULTRASONIC_LEVEL_SENSOR,
   VOLTAGE_SENSOR,
   WATER_SENSOR,
+  WIRELESS_420MA_CURRENT_LOOP_SENSOR,
 } from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
 import {
@@ -57,6 +58,7 @@ import HoneywellFiveEightZeroZero from './decoders/HoneywellFiveEightZeroZero';
 import HighPrecisionTiltSensor from './decoders/HighPrecisionTiltSensor';
 import UltraSonicSensor from './decoders/UltraSonicSensor';
 import HBVibrationSensor from './decoders/HBVibrationSensor';
+import CurrentLoopSensor from './decoders/CurrentLoopSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -155,6 +157,10 @@ class RadioBridgeDecoder {
         break;
       case ULTRASONIC_LEVEL_SENSOR:
         data[ULTRASONIC_LEVEL_SENSOR] = UltraSonicSensor(hexDecimal);
+        break;
+      case WIRELESS_420MA_CURRENT_LOOP_SENSOR:
+        data[WIRELESS_420MA_CURRENT_LOOP_SENSOR] =
+          CurrentLoopSensor(hexDecimal);
         break;
       case HB_VIBRATION_SENSOR:
         data[HB_VIBRATION_SENSOR] = HBVibrationSensor(hexDecimal);
