@@ -12,6 +12,7 @@ import {
   GLASS_BREAK_EVENT,
   GPS_SENSOR,
   HB_VIBRATION_SENSOR,
+  HIGH_PRECISION_TILT_SENSOR,
   HONEYWELL_5800,
   LINK_QUALITY,
   PUSH_BUTTON,
@@ -52,6 +53,7 @@ import AccelerationMovementSensor from './decoders/AccelerationMovementSensor';
 import TiltSensor from './decoders/TiltSensor';
 import VoltageSensor from './decoders/VoltageSensor';
 import HoneywellFiveEightZeroZero from './decoders/HoneywellFiveEightZeroZero';
+import HighPrecisionTiltSensor from './decoders/HighPrecisionTiltSensor';
 import HBVibrationSensor from './decoders/HBVibrationSensor';
 
 class RadioBridgeDecoder {
@@ -145,6 +147,9 @@ class RadioBridgeDecoder {
         break;
       case HONEYWELL_5800:
         data[HONEYWELL_5800] = HoneywellFiveEightZeroZero(hexDecimal);
+        break;
+      case HIGH_PRECISION_TILT_SENSOR:
+        data[HIGH_PRECISION_TILT_SENSOR] = HighPrecisionTiltSensor(hexDecimal);
         break;
       case HB_VIBRATION_SENSOR:
         data[HB_VIBRATION_SENSOR] = HBVibrationSensor(hexDecimal);
