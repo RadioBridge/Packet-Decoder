@@ -11,6 +11,7 @@ import {
   DOWNLINK,
   GLASS_BREAK_EVENT,
   GPS_SENSOR,
+  HB_VIBRATION_SENSOR,
   HONEYWELL_5800,
   LINK_QUALITY,
   PUSH_BUTTON,
@@ -51,6 +52,7 @@ import AccelerationMovementSensor from './decoders/AccelerationMovementSensor';
 import TiltSensor from './decoders/TiltSensor';
 import VoltageSensor from './decoders/VoltageSensor';
 import HoneywellFiveEightZeroZero from './decoders/HoneywellFiveEightZeroZero';
+import HBVibrationSensor from './decoders/HBVibrationSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -143,6 +145,9 @@ class RadioBridgeDecoder {
         break;
       case HONEYWELL_5800:
         data[HONEYWELL_5800] = HoneywellFiveEightZeroZero(hexDecimal);
+        break;
+      case HB_VIBRATION_SENSOR:
+        data[HB_VIBRATION_SENSOR] = HBVibrationSensor(hexDecimal);
         break;
     }
 
