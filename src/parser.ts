@@ -22,6 +22,7 @@ import {
   TEST_MESSAGE,
   TEST_MODE_EXIT,
   TILT_EVENT,
+  VOLTAGE_SENSOR,
   WATER_SENSOR,
 } from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
@@ -47,6 +48,7 @@ import CompassSensor from './decoders/CompassSensor';
 import GpsDevice from './decoders/GpsDevice';
 import AccelerationMovementSensor from './decoders/AccelerationMovementSensor';
 import TiltSensor from './decoders/TiltSensor';
+import VoltageSensor from './decoders/VoltageSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -133,6 +135,9 @@ class RadioBridgeDecoder {
         break;
       case TILT_EVENT:
         data[TILT_EVENT] = TiltSensor(hexDecimal);
+        break;
+      case VOLTAGE_SENSOR:
+        data[VOLTAGE_SENSOR] = VoltageSensor(hexDecimal);
         break;
     }
 
