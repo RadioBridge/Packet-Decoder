@@ -29,6 +29,7 @@ import {
   ULTRASONIC_LEVEL_SENSOR,
   VOLTAGE_SENSOR,
   WATER_SENSOR,
+  WEATHER_STATION,
   WIRELESS_420MA_CURRENT_LOOP_SENSOR,
 } from './types/EventTypes';
 import Temperature_Event from './decoders/Temperature_Event';
@@ -61,6 +62,7 @@ import UltraSonicSensor from './decoders/UltraSonicSensor';
 import HBVibrationSensor from './decoders/HBVibrationSensor';
 import CurrentLoopSensor from './decoders/CurrentLoopSensor';
 import ThermocoupleTemperatureSensor from './decoders/ThermocoupleTemperatureSensor';
+import WeatherStationSensor from './decoders/WeatherStationSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -166,6 +168,9 @@ class RadioBridgeDecoder {
         break;
       case THERMOCOUPLE_TEMP:
         data[THERMOCOUPLE_TEMP] = ThermocoupleTemperatureSensor(hexDecimal);
+        break;
+      case WEATHER_STATION:
+        data[WEATHER_STATION] = WeatherStationSensor(hexDecimal);
         break;
       case HB_VIBRATION_SENSOR:
         data[HB_VIBRATION_SENSOR] = HBVibrationSensor(hexDecimal);

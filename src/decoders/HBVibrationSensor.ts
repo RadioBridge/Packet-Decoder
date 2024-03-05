@@ -100,7 +100,7 @@ export default function (hexDecimal: [HexDecimal]) {
   }
 
   if (5 in hexDecimal) {
-    const voltage = parseInt(hexToDecimal(hexDecimal[5]['hex']));
+    const voltage = hexToDecimal(hexDecimal[5]['hex']);
     dataMessage['bias_voltage'] = { value: voltage / 100, unit: 'V' };
   }
   return dataMessage;

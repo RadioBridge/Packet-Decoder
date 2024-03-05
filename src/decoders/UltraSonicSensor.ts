@@ -9,10 +9,9 @@ export default function (hexDecimal: [HexDecimal]) {
     const distanceUpperByteHex = hexDecimal[2]['hex'];
     const distanceLowerByteHex = hexDecimal[3]['hex'];
 
-    const currentDistance = parseInt(
-      hexToDecimal(distanceUpperByteHex + '' + distanceLowerByteHex),
+    const currentDistance = hexToDecimal(
+      distanceUpperByteHex + '' + distanceLowerByteHex,
     );
-
     const bitMsgs = [
       'Periodic Report',
       'Distance has risen above upper threshold',

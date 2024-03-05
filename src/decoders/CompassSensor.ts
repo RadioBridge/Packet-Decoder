@@ -20,7 +20,7 @@ export default function (hexDecimal: [HexDecimal]) {
 
   if (2 in hexDecimal && 3 in hexDecimal) {
     const byteHex = hexDecimal[2]['hex'] + hexDecimal[3]['hex'];
-    dataMessage['angle'] = parseInt(hexToDecimal(byteHex));
+    dataMessage['angle'] = hexToDecimal(byteHex);
   }
 
   if (4 in hexDecimal) {

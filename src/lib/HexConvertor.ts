@@ -89,7 +89,7 @@ export function binaryToDecimal(binary: string) {
 }
 
 export function hexToDecimal(hex: string) {
-  return math.base_convert(hex, 16, 10);
+  return parseInt(math.base_convert(hex, 16, 10));
 }
 
 export function hexToBinaryMessageDecoder(
