@@ -25,6 +25,7 @@ import {
   TEST_MESSAGE,
   TEST_MODE_EXIT,
   TILT_EVENT,
+  ULTRASONIC_LEVEL_SENSOR,
   VOLTAGE_SENSOR,
   WATER_SENSOR,
 } from './types/EventTypes';
@@ -54,6 +55,7 @@ import TiltSensor from './decoders/TiltSensor';
 import VoltageSensor from './decoders/VoltageSensor';
 import HoneywellFiveEightZeroZero from './decoders/HoneywellFiveEightZeroZero';
 import HighPrecisionTiltSensor from './decoders/HighPrecisionTiltSensor';
+import UltraSonicSensor from './decoders/UltraSonicSensor';
 import HBVibrationSensor from './decoders/HBVibrationSensor';
 
 class RadioBridgeDecoder {
@@ -150,6 +152,9 @@ class RadioBridgeDecoder {
         break;
       case HIGH_PRECISION_TILT_SENSOR:
         data[HIGH_PRECISION_TILT_SENSOR] = HighPrecisionTiltSensor(hexDecimal);
+        break;
+      case ULTRASONIC_LEVEL_SENSOR:
+        data[ULTRASONIC_LEVEL_SENSOR] = UltraSonicSensor(hexDecimal);
         break;
       case HB_VIBRATION_SENSOR:
         data[HB_VIBRATION_SENSOR] = HBVibrationSensor(hexDecimal);
