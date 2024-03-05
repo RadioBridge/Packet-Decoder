@@ -24,6 +24,7 @@ import {
   TEMPERATURE_EVENT,
   TEST_MESSAGE,
   TEST_MODE_EXIT,
+  THERMOCOUPLE_TEMP,
   TILT_EVENT,
   ULTRASONIC_LEVEL_SENSOR,
   VOLTAGE_SENSOR,
@@ -59,6 +60,7 @@ import HighPrecisionTiltSensor from './decoders/HighPrecisionTiltSensor';
 import UltraSonicSensor from './decoders/UltraSonicSensor';
 import HBVibrationSensor from './decoders/HBVibrationSensor';
 import CurrentLoopSensor from './decoders/CurrentLoopSensor';
+import ThermocoupleTemperatureSensor from './decoders/ThermocoupleTemperatureSensor';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
@@ -161,6 +163,9 @@ class RadioBridgeDecoder {
       case WIRELESS_420MA_CURRENT_LOOP_SENSOR:
         data[WIRELESS_420MA_CURRENT_LOOP_SENSOR] =
           CurrentLoopSensor(hexDecimal);
+        break;
+      case THERMOCOUPLE_TEMP:
+        data[THERMOCOUPLE_TEMP] = ThermocoupleTemperatureSensor(hexDecimal);
         break;
       case HB_VIBRATION_SENSOR:
         data[HB_VIBRATION_SENSOR] = HBVibrationSensor(hexDecimal);

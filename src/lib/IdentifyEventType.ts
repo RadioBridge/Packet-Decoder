@@ -25,6 +25,7 @@ import {
   TANK_LEVEL_SENSOR,
   TEMPERATURE_EVENT,
   TEST_MODE_EXIT,
+  THERMOCOUPLE_TEMP,
   TILT_EVENT,
   ULTRASONIC_LEVEL_SENSOR,
   VOLTAGE_SENSOR,
@@ -89,6 +90,9 @@ export function identifyEventType(firstByteInDecimal: number) {
       break;
     case 17:
       command = WIRELESS_420MA_CURRENT_LOOP_SENSOR;
+      break;
+    case 19:
+      command = THERMOCOUPLE_TEMP;
       break;
     case 20:
       command = VOLTAGE_SENSOR;
