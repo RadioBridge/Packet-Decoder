@@ -6,9 +6,9 @@ describe('unit | HoneywellFiveEightZeroZero', () => {
     [
       'HONEYWELL_5800',
       '6417ff331004b4034fea53',
-      '3346436',
+      3346436,
       '0x331004',
-      '46083',
+      46083,
       '0xb403',
     ],
   ])(
@@ -16,16 +16,16 @@ describe('unit | HoneywellFiveEightZeroZero', () => {
     (
       description,
       payload: string,
-      Decimal_Id,
-      Hex_ID,
+      decimalId,
+      hexId,
       sensorPayload,
       sensorPayloadHex,
     ) => {
       const decodedData = decode(payload);
       const expectedOutput = {};
       expectedOutput[HONEYWELL_5800] = {
-        decimal_id: Decimal_Id,
-        hex_id: Hex_ID,
+        decimal_id: decimalId,
+        hex_id: hexId,
         sensor_payload: sensorPayload,
         sensor_payload_hex: sensorPayloadHex,
       };

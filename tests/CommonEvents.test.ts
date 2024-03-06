@@ -24,7 +24,7 @@ describe('unit | supervisoryEvent', () => {
         TamperSinceLastReset: false,
         threshold: 'X-axis over threshold',
         battery: batteryVoltage,
-        accumulationCount: '0',
+        accumulationCount: 0,
       };
       expect(decodedData).toMatchObject(expectedOutput);
     },

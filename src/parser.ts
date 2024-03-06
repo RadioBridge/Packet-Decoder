@@ -1,6 +1,6 @@
 import { DecodedPayload, HexDecimal } from './types';
 import { identifyEventType } from './lib/IdentifyEventType';
-import { hexToBinaryDecimal } from './lib/HexConvertor';
+import { binaryToDecimal, hexToBinaryDecimal } from './lib/HexConvertor';
 import {
   ACCELERATION_MOVEMENT_SENSOR,
   AIR_TEMP_HUMIDITY_SENSOR,
@@ -77,6 +77,9 @@ class RadioBridgeDecoder {
 
   convert() {
     const hexDecimal = hexToBinaryDecimal(this.hexPayload);
+    const packetCounter = hexDecimal[0]['decimal'];
+    const protocolVersion = hexDecimal[0]['binary'].slice(0, 4);
+
     hexDecimal.splice(0, 1);
 
     if (!(0 in hexDecimal)) {
@@ -84,8 +87,13 @@ class RadioBridgeDecoder {
     }
 
     const eventType = identifyEventType(hexDecimal[0]['decimal']);
-
-    return this.mapConversion(eventType, hexDecimal);
+    const eventDecoded = this.mapConversion(eventType, hexDecimal);
+    return {
+      protocol: binaryToDecimal(protocolVersion),
+      counter: packetCounter,
+      type: eventType,
+      ...eventDecoded,
+    };
   }
 
   mapConversion(eventType: string, hexDecimal: Array<HexDecimal>) {
