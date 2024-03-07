@@ -56,7 +56,7 @@ export default function (
       });
     }
   });
-
+  cfftTotal = 0 == cfftTotal ? 1 : cfftTotal;
   finalValues.forEach((additionalConversion) => {
     for (const [key, singleBandVal] of Object.entries(
       additionalConversion.condensedFft.values,
