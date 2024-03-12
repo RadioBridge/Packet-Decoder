@@ -6,6 +6,7 @@ import {
   AIR_TEMP_HUMIDITY_SENSOR,
   AMBIENT_LIGHT_SENSOR,
   COMPASS_SENSOR,
+  CONDENSED_FFT,
   CONTACT_SENSOR,
   DEVICE_INFO,
   DOOR_WINDOW_SENSOR,
@@ -68,11 +69,14 @@ import CurrentLoopSensor from './decoders/CurrentLoopSensor';
 import ThermocoupleTemperatureSensor from './decoders/ThermocoupleTemperatureSensor';
 import WeatherStationSensor from './decoders/WeatherStationSensor';
 import MagnetometerSensor from './decoders/MagnetometerSensor';
+import CondensedFFt from './decoders/CondensedFFt';
 
 class RadioBridgeDecoder {
   private hexPayload: string;
-  constructor(hexPayload: string) {
+  private hexPayloadTwo: string;
+  constructor(hexPayload: string, hexPayloadTwo: string | null = null) {
     this.hexPayload = hexPayload;
+    this.hexPayloadTwo = hexPayloadTwo;
   }
 
   convert() {
@@ -86,7 +90,10 @@ class RadioBridgeDecoder {
       return {};
     }
 
-    const eventType = identifyEventType(hexDecimal[0]['decimal']);
+    const eventType = identifyEventType(
+      hexDecimal[0]['decimal'],
+      this.hexPayload,
+    );
     const eventDecoded = this.mapConversion(eventType, hexDecimal);
     return {
       protocol: binaryToDecimal(protocolVersion),
@@ -199,12 +206,19 @@ class RadioBridgeDecoder {
         data[INTERNAL_TEMPERATURE] =
           AirTemperatureAndHumiditySensor(hexDecimal);
         break;
+      case CONDENSED_FFT:
+        data[CONDENSED_FFT] = CondensedFFt(
+          hexDecimal,
+          this.hexPayload,
+          this.hexPayloadTwo,
+        );
+        break;
     }
 
     return data;
   }
 }
 
-export function decode(hexPayload: string): DecodedPayload {
-  return new RadioBridgeDecoder(hexPayload).convert();
+export function decode(hexPayload: string, hexDataTwo: string | null = null): DecodedPayload {
+  return new RadioBridgeDecoder(hexPayload, hexDataTwo).convert();
 }

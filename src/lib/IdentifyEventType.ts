@@ -3,6 +3,10 @@ import {
   AIR_TEMP_HUMIDITY_SENSOR,
   AMBIENT_LIGHT_SENSOR,
   COMPASS_SENSOR,
+  CONDENSED_FFT,
+  CONDENSED_FFT_ENERGY,
+  CONDENSED_FFT_ENERGY_PART,
+  CONDENSED_FFT_PART,
   CONTACT_SENSOR,
   CURRENT_SENSOR_STATE,
   DEVICE_INFO,
@@ -33,8 +37,12 @@ import {
   WEATHER_STATION,
   WIRELESS_420MA_CURRENT_LOOP_SENSOR,
 } from '../types/EventTypes';
+import { binaryToDecimal, hexToBinaryDecimal } from './HexConvertor';
 
-export function identifyEventType(firstByteInDecimal: number) {
+export function identifyEventType(
+  firstByteInDecimal: number,
+  apiHexData: string | null = null,
+) {
   let command = 'UNKNOWN';
 
   switch (firstByteInDecimal) {
@@ -117,6 +125,26 @@ export function identifyEventType(firstByteInDecimal: number) {
     case 30:
     case 31:
       command = HB_VIBRATION_SENSOR;
+      break;
+    case 32:
+      if (apiHexData == null) {
+        command = EVENT_UNKNOWN;
+      } else {
+        let hexDecimal = hexToBinaryDecimal(apiHexData);
+        hexDecimal.shift();
+        const payloadDefByte = binaryToDecimal(
+          hexDecimal[1]['binary'].substr(0, 4),
+        );
+        if (payloadDefByte == 0) {
+          command = CONDENSED_FFT_ENERGY;
+        } else if (payloadDefByte == 1) {
+          command = CONDENSED_FFT_ENERGY_PART;
+        } else if (payloadDefByte == 2) {
+          command = CONDENSED_FFT;
+        } else if (payloadDefByte == 3) {
+          command = CONDENSED_FFT_PART;
+        }
+      }
       break;
     case 27:
       command = WEATHER_STATION;
