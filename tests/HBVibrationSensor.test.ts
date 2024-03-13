@@ -14,14 +14,15 @@ describe('unit | HBVibrationSensor', () => {
       41,
       1.6,
     ],
+    ['1f1c00010010a0', 'Channel 1', 'Periodic Report', '0.01000', 0, 16, 1.6],
   ])(
     'decodes a HBVibration %s event',
     (
       payload: string,
       axis,
       expectedEvent,
-      vibrationVelocity,
-      vibrationGforce,
+      lowFreqPeakVelocity,
+      highFreqPeakGforce,
       temperature,
       biasVoltage,
     ) => {
@@ -30,10 +31,10 @@ describe('unit | HBVibrationSensor', () => {
       expectedOutput[HB_VIBRATION_SENSOR] = {
         axis: axis,
         event: expectedEvent,
-        vibration_velocity: { value: vibrationVelocity, unit: 'inches/sec' },
-        vibration_gforce: { value: vibrationGforce, unit: 'g' },
+        lowFreqPeakVelocity: { value: lowFreqPeakVelocity, unit: 'inches/sec' },
+        highFreqPeakGforce: { value: highFreqPeakGforce, unit: 'g' },
         accelerator_temp: { value: temperature, unit: 'Celsius' },
-        bias_voltage: { value: biasVoltage, unit: 'V' },
+        biasVoltage: { value: biasVoltage, unit: 'V' },
       };
       expect(decodedData).toMatchObject(expectedOutput);
     },

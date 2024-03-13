@@ -7,6 +7,7 @@ import {
   AMBIENT_LIGHT_SENSOR,
   COMPASS_SENSOR,
   CONDENSED_FFT,
+  CONDENSED_FFT_ENERGY,
   CONTACT_SENSOR,
   DEVICE_INFO,
   DOOR_WINDOW_SENSOR,
@@ -69,18 +70,23 @@ import CurrentLoopSensor from './decoders/CurrentLoopSensor';
 import ThermocoupleTemperatureSensor from './decoders/ThermocoupleTemperatureSensor';
 import WeatherStationSensor from './decoders/WeatherStationSensor';
 import MagnetometerSensor from './decoders/MagnetometerSensor';
-import CondensedFFt from './decoders/CondensedFFt';
+import CondensedFFt from './decoders/HighFreqVibrationSensor/CondensedFFt';
+import CondensedFftEnergy from './decoders/HighFreqVibrationSensor/CondensedFftEnergy';
 
 class RadioBridgeDecoder {
-  private hexPayload: string;
-  private hexPayloadTwo: string;
-  constructor(hexPayload: string, hexPayloadTwo: string | null = null) {
-    this.hexPayload = hexPayload;
-    this.hexPayloadTwo = hexPayloadTwo;
+  private hexPayloads: string[] = [];
+
+  constructor(...args: string[]) {
+    if (args.length < 1) {
+      throw new Error('Atleast one payload is required to decode.');
+    }
+    for (let i = 0, arg; (arg = args[i]); i++) {
+      this.hexPayloads.push(arg);
+    }
   }
 
   convert() {
-    const hexDecimal = hexToBinaryDecimal(this.hexPayload);
+    const hexDecimal = hexToBinaryDecimal(this.hexPayloads[0]);
     const packetCounter = hexDecimal[0]['decimal'];
     const protocolVersion = hexDecimal[0]['binary'].slice(0, 4);
 
@@ -92,7 +98,7 @@ class RadioBridgeDecoder {
 
     const eventType = identifyEventType(
       hexDecimal[0]['decimal'],
-      this.hexPayload,
+      this.hexPayloads[0],
     );
     const eventDecoded = this.mapConversion(eventType, hexDecimal);
     return {
@@ -207,10 +213,12 @@ class RadioBridgeDecoder {
           AirTemperatureAndHumiditySensor(hexDecimal);
         break;
       case CONDENSED_FFT:
-        data[CONDENSED_FFT] = CondensedFFt(
+        data[CONDENSED_FFT] = CondensedFFt(hexDecimal, this.hexPayloads);
+        break;
+      case CONDENSED_FFT_ENERGY:
+        data[CONDENSED_FFT_ENERGY] = CondensedFftEnergy(
           hexDecimal,
-          this.hexPayload,
-          this.hexPayloadTwo,
+          this.hexPayloads,
         );
         break;
     }
@@ -219,6 +227,6 @@ class RadioBridgeDecoder {
   }
 }
 
-export function decode(hexPayload: string, hexDataTwo: string | null = null): DecodedPayload {
-  return new RadioBridgeDecoder(hexPayload, hexDataTwo).convert();
+export function decode(...args: string[]): DecodedPayload {
+  return <DecodedPayload>new RadioBridgeDecoder(...args).convert();
 }

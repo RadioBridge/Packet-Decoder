@@ -9,10 +9,10 @@ import {
 type HBVibrationDecodeType = {
   axis: string;
   event: string | null;
-  vibration_velocity: object;
-  vibration_gforce: object;
+  lowFreqPeakVelocity: object;
+  highFreqPeakGforce: object;
   accelerator_temp: object;
-  bias_voltage: object;
+  biasVoltage: object;
 };
 
 export default function (hexDecimal: [HexDecimal]) {
@@ -20,10 +20,10 @@ export default function (hexDecimal: [HexDecimal]) {
   const dataMessage: HBVibrationDecodeType = {
     axis: '',
     event: null,
-    vibration_velocity: {},
-    vibration_gforce: {},
+    lowFreqPeakVelocity: {},
+    highFreqPeakGforce: {},
     accelerator_temp: {},
-    bias_voltage: {},
+    biasVoltage: {},
   };
   switch (hexDecimal[0]['decimal']) {
     case 28:
@@ -79,14 +79,14 @@ export default function (hexDecimal: [HexDecimal]) {
     const byteOnetwoHexData = hexDecimal[2]['hex'];
     const decimalVal = hexToDecimal(byteOnetwoHexData);
     const inchesPerSec = decimalVal > 0 ? decimalVal / 100 : 0;
-    dataMessage['vibration_velocity'] = {
+    dataMessage['lowFreqPeakVelocity'] = {
       value: inchesPerSec.toFixed(5),
       unit: 'inches/sec',
     };
   }
 
   if (3 in hexDecimal) {
-    dataMessage['vibration_gforce'] = {
+    dataMessage['highFreqPeakGforce'] = {
       value: hexDecimal[3]['decimal'] / 4,
       unit: 'g',
     };
@@ -101,7 +101,7 @@ export default function (hexDecimal: [HexDecimal]) {
 
   if (5 in hexDecimal) {
     const voltage = hexToDecimal(hexDecimal[5]['hex']);
-    dataMessage['bias_voltage'] = { value: voltage / 100, unit: 'V' };
+    dataMessage['biasVoltage'] = { value: voltage / 100, unit: 'V' };
   }
   return dataMessage;
 }

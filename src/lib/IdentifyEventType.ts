@@ -130,11 +130,12 @@ export function identifyEventType(
       if (apiHexData == null) {
         command = EVENT_UNKNOWN;
       } else {
-        let hexDecimal = hexToBinaryDecimal(apiHexData);
+        const hexDecimal = hexToBinaryDecimal(apiHexData);
         hexDecimal.shift();
         const payloadDefByte = binaryToDecimal(
-          hexDecimal[1]['binary'].substr(0, 4),
+          hexDecimal[1]['binary'].slice(0, 4),
         );
+
         if (payloadDefByte == 0) {
           command = CONDENSED_FFT_ENERGY;
         } else if (payloadDefByte == 1) {
