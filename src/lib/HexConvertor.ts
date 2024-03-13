@@ -88,6 +88,10 @@ export function binaryToDecimal(binary: string) {
   return locutusModule.php.math.base_convert(binary, 2, 10);
 }
 
+export function binaryToHex(binary: string) {
+  return locutusModule.php.math.base_convert(binary, 2, 16);
+}
+
 export function hexToDecimal(hex: string) {
   return parseInt(math.base_convert(hex, 16, 10));
 }
