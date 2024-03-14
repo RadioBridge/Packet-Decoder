@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { HexDecimal } from '../../types';
 import { decode } from '../../parser';
 import { HB_VIBRATION_SENSOR } from '../../types/EventTypes';

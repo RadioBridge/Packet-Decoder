@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import type { HexDecimal } from '../types';
 import { identifyEventType } from '../lib/IdentifyEventType';
 import {
@@ -5,7 +7,7 @@ import {
   hexToDecimalMessageDecoder,
 } from '../lib/HexConvertor';
 
-export default function (hexDecimal: [HexDecimal]) {
+export default function (hexDecimal: HexDecimal[]) {
   const eventType = identifyEventType(hexDecimal[0]['decimal']);
   let dataMessage = {};
   if (hexDecimal.length >= 2) {

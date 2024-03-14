@@ -3,6 +3,13 @@
 import terser from '@rollup/plugin-terser';
 import typescript2 from 'rollup-plugin-typescript2';
 import packageJSON from './package.json' assert { type: 'json' };
+import resolve from "@rollup/plugin-node-resolve";
+import babel from "@rollup/plugin-babel";
+import commonjs from "@rollup/plugin-commonjs";
+import globals from "rollup-plugin-node-globals";
+import builtins from 'rollup-plugin-node-builtins';
+import autoExternal from 'rollup-plugin-auto-external';
+import internal from 'rollup-plugin-internal';
 
 /**
  * Comment with library information to be appended in the generated bundles.
@@ -22,7 +29,7 @@ const banner = `/*!
 function createOutputOptions(options) {
   return {
     banner,
-    name: '[libraryCamelCaseName]',
+    name: 'radiobridgeDecoder',
     exports: 'named',
     sourcemap: true,
     ...options,
@@ -59,6 +66,37 @@ const options = {
       file: './dist/index.umd.min.js',
       format: 'umd',
       plugins: [terser()],
+    }),
+    createOutputOptions({
+      file: './dist/index.iife.min.js',
+      format: 'iife',
+      name: "radiobridgeDecoder",
+      esModule: false,
+      exports: "named",
+      sourcemap: true,
+      plugins: [
+
+        resolve({
+          browser: true,
+          preferBuiltins: false,
+          jsnext: true,
+          main: true,
+          moduleDirectories: ['node_modules']
+        }),
+        commonjs({
+          include: 'node_modules/**',
+          ignoreGlobal: false,
+          sourceMap: false,
+        }),
+        autoExternal(),
+        globals(),
+        babel({
+          babelHelpers: "bundled",
+        }),
+        builtins(),
+        // internal(['locutus', 'locutus/php', 'buffer']),
+        terser(),
+      ],
     }),
   ],
   plugins: [

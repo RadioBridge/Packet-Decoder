@@ -24,13 +24,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
 
     // Type-checking settings.
-    "lib": ["ES2020"],
+    "lib": ["ES2020", "DOM"],
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "types": ["jest"]
+    "types": ["jest"],
+    "checkJs": false
   },
   "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }

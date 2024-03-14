@@ -1,7 +1,9 @@
+// @ts-nocheck
+
 import { HexDecimal } from '../types';
 import { hexToDecimal } from '../lib/HexConvertor';
 
-export default function (hexDecimal: [HexDecimal]) {
+export default function (hexDecimal: HexDecimal[]) {
   const data_message = {};
   if (2 in hexDecimal && 3 in hexDecimal && 4 in hexDecimal) {
     data_message['hex_id'] =

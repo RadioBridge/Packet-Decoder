@@ -131,19 +131,20 @@ export function identifyEventType(
         command = EVENT_UNKNOWN;
       } else {
         const hexDecimal = hexToBinaryDecimal(apiHexData);
-        hexDecimal.shift();
-        const payloadDefByte = binaryToDecimal(
-          hexDecimal[1]['binary'].slice(0, 4),
-        );
+        if (hexDecimal.length > 2) {
+          hexDecimal.shift();
+          const binaryVal = '' + hexDecimal![1]!['binary'];
+          const payloadDefByte = binaryToDecimal(binaryVal.slice(0, 4));
 
-        if (payloadDefByte == 0) {
-          command = CONDENSED_FFT_ENERGY;
-        } else if (payloadDefByte == 1) {
-          command = CONDENSED_FFT_ENERGY_PART;
-        } else if (payloadDefByte == 2) {
-          command = CONDENSED_FFT;
-        } else if (payloadDefByte == 3) {
-          command = CONDENSED_FFT_PART;
+          if (payloadDefByte == 0) {
+            command = CONDENSED_FFT_ENERGY;
+          } else if (payloadDefByte == 1) {
+            command = CONDENSED_FFT_ENERGY_PART;
+          } else if (payloadDefByte == 2) {
+            command = CONDENSED_FFT;
+          } else if (payloadDefByte == 3) {
+            command = CONDENSED_FFT_PART;
+          }
         }
       }
       break;

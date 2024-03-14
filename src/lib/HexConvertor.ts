@@ -2,7 +2,7 @@ import * as locutusModule from 'locutus';
 import { math } from 'locutus/php';
 import { HexDecimal } from '../types';
 
-export function hexToBinaryDecimal(data: string): [HexDecimal] {
+export function hexToBinaryDecimal(data: string): HexDecimal[] {
   const hexData = data.match(new RegExp('.{1,2}', 'g')) || [];
   const hexDecimalBinary: Array<HexDecimal> = [];
   hexData.forEach((singleHexByte) => {
@@ -34,7 +34,7 @@ export function baseConvert(
 
 export function hexToDecimalMessageDecoder(
   decimalData: number,
-  bitsMessages: { [key: string]: string } | string[],
+  bitsMessages: { [key: string | number]: string } | string[],
 ) {
   if (decimalData in bitsMessages) {
     return bitsMessages[decimalData];
@@ -110,7 +110,7 @@ export function hexToBinaryMessageDecoder(
   const binaryValueArr: string[] = binaryValue.match(/.{1,1}/g) || [];
 
   for (let bitNo = 0; bitNo < binaryValueArr.length; bitNo++) {
-    const value: number = parseInt(binaryValueArr[bitNo]);
+    const value: number = parseInt('' + binaryValueArr[bitNo]);
     if (value === 1) {
       if (bitNo in bitsMessages) {
         diffMsgs[bitNo] = bitsMessages[bitNo] || '';

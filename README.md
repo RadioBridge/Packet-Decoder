@@ -1,37 +1,23 @@
 # RadioBridge Decoder
 
+This library helps de-coding the Radio Bridge sensor payload as a JSON Object, that can be used in various applications to display the proper sensor states.
+
 ## Installation
 
-This library is published in the NPM registry and can be installed using any compatible package manager.
+This library can be installed using any compatible package manager.
 
 ```sh
-npm install radiobridge-decoder --save
+npm install @radiobridge/packet-decoder --save
 
 # For Yarn, use the command below.
-yarn add radiobridge-decoder
+yarn add @radiobridge/packet-decoder
 ```
 
-### Installation from CDN
+### Usage
 
-This module has an UMD bundle available through JSDelivr and Unpkg CDNs.
+```ts
+const decoder = require('@radiobridge/packet-decoder')
 
-```html
-<!-- For UNPKG use the code below. -->
-<script src="https://unpkg.com/radiobridge-decoder"></script>
-
-<!-- For JSDelivr use the code below. -->
-<script src="https://cdn.jsdelivr.net/npm/radiobridge-decoder"></script>
-
-<script>
-  // UMD module is exposed through the "[libraryCamelCaseName]" global variable.
-  console.log([libraryCamelCaseName]);
-</script>
+console.log(decoder.decodePayload('170001'))
 ```
 
-## Documentation
-
-[Documentation generated from source files by Typedoc](./docs/README.md).
-
-## License
-
-Released under [MIT License](./LICENSE).

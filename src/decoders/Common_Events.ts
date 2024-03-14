@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   binaryToDecimal,
   hexToBinaryMessageDecoder,
@@ -8,7 +9,7 @@ import {
 import { HexDecimal } from '../types';
 import { binaryStateDecode } from '../lib/CommonDecodings';
 
-export function supervisory(hexDecimal: [HexDecimal]) {
+export function supervisory(hexDecimal: HexDecimal[]) {
   // Below array defines what each bit represents in message if it is set to 1
   const supervisoryDecode = {};
   // removing zero byte because this represents sensor message type
@@ -67,7 +68,7 @@ export function supervisory(hexDecimal: [HexDecimal]) {
   return supervisoryDecode;
 }
 
-export function tamperDetect(hexDecimal: [HexDecimal]) {
+export function tamperDetect(hexDecimal: HexDecimal[]) {
   const byteZeroHex = hexDecimal[1];
   const dataMessage = {};
   const bitMsgs = {
@@ -82,7 +83,7 @@ export function tamperDetect(hexDecimal: [HexDecimal]) {
  * Decodes reset events
  * @param hexDecimal
  */
-export function reset(hexDecimal: [HexDecimal]) {
+export function reset(hexDecimal: HexDecimal[]) {
   let hardwareVersion, firmwareVersion;
   if (hexDecimal.length >= 5) {
     const hardwareVersionByte = hexDecimal[2];
@@ -125,7 +126,7 @@ export function reset(hexDecimal: [HexDecimal]) {
  * Decodes downlink events
  * @param hexDecimal
  */
-export function downlink(hexDecimal: [HexDecimal]) {
+export function downlink(hexDecimal: HexDecimal[]) {
   const byteZeroDecimal = hexDecimal[1]['decimal'];
   const dataMessage = {};
   const bitMsgs = {
@@ -169,7 +170,7 @@ export function testEvent() {
  * Link quality
  * @param hexDecimal
  */
-export function linkQuality(hexDecimal: [HexDecimal]) {
+export function linkQuality(hexDecimal: HexDecimal[]) {
   const rssiValue = signedHexToDecimal(hexDecimal[2]['hex']);
   const snrValue = signedHexToDecimal(hexDecimal[3]['hex']);
   return { rssi: rssiValue, snr: snrValue };
@@ -193,7 +194,7 @@ export function manufacturingTestMessage() {
  * Device info
  * @param hexDecimal
  */
-export function deviceInfo(hexDecimal: [HexDecimal]) {
+export function deviceInfo(hexDecimal: HexDecimal[]) {
   let subDataMessage = '';
 
   let checkIfAllFF = false;

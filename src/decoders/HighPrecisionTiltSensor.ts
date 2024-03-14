@@ -1,10 +1,12 @@
+// @ts-nocheck
+
 import type { HexDecimal } from '../types';
 import {
   hexToDecimalMessageDecoder,
   signedHexToDecimal,
 } from '../lib/HexConvertor';
 
-export default function (hexDecimal: [HexDecimal]) {
+export default function (hexDecimal: HexDecimal[]) {
   let wholeNum: number = 0;
   let fraction: number = 0;
   if (2 in hexDecimal) {

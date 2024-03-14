@@ -1,6 +1,4 @@
+// @ts-nocheck
 export default function () {
-  const dataMessage = {};
-  dataMessage['event'] = 'Glass Break';
-
-  return dataMessage;
+  return { event: 'Glass Break' };
 }

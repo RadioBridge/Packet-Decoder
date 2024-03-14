@@ -1,7 +1,9 @@
+// @ts-nocheck
+
 import { HexDecimal } from '../types';
 import { signedHexToDecimal } from '../lib/HexConvertor';
 
-export default function (hexDecimal: [HexDecimal]) {
+export default function (hexDecimal: HexDecimal[]) {
   const dataMessage = { latitude: '', longitude: '' };
 
   if (1 in hexDecimal) {

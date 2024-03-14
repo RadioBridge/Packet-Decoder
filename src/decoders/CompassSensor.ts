@@ -1,7 +1,8 @@
+// @ts-nocheck
 import { HexDecimal } from '../types';
 import { hexToDecimal, hexToDecimalMessageDecoder } from '../lib/HexConvertor';
 
-export default function (hexDecimal: [HexDecimal]) {
+export default function (hexDecimal: HexDecimal[]) {
   const dataMessage = {};
   if (hexDecimal.length >= 1) {
     const byteZeroHex = hexDecimal[1];

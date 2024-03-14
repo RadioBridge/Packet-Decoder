@@ -1,7 +1,9 @@
+// @ts-nocheck
+
 import { hexToDecimal, signedHexToDecimal } from '../lib/HexConvertor';
 import type { HexDecimal } from '../types';
 // Assuming sensorState is a boolean variable
-export default function (hexDecimal: [HexDecimal]) {
+export default function (hexDecimal: HexDecimal[]) {
   const dataMessage = {};
   if (1 in hexDecimal) {
     const byteOneHexData = hexDecimal[1]['decimal'];

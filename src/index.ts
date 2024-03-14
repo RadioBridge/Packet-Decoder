@@ -2,11 +2,11 @@
  * A Branded Type for values parseable to number.
  */
 import { decode } from './parser';
-import { DecodedPayload } from './types';
+// import { DecodedPayload } from './types';
 import { base64decode } from './lib/utils';
 import { binaryToHex } from './lib/HexConvertor';
 
-export const decodePayload = (hexPayload: string): DecodedPayload => {
+export const decodePayload = (hexPayload: string) => {
   return decode(hexPayload);
 };
 

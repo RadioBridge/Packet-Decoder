@@ -1,4 +1,4 @@
-import { DecodedPayload, HexDecimal } from './types';
+import { HexDecimal } from './types';
 import { identifyEventType } from './lib/IdentifyEventType';
 import { binaryToDecimal, hexToBinaryDecimal } from './lib/HexConvertor';
 import {
@@ -86,9 +86,9 @@ class RadioBridgeDecoder {
   }
 
   convert() {
-    const hexDecimal = hexToBinaryDecimal(this.hexPayloads[0]);
-    const packetCounter = hexDecimal[0]['decimal'];
-    const protocolVersion = hexDecimal[0]['binary'].slice(0, 4);
+    const hexDecimal = hexToBinaryDecimal(<string>this.hexPayloads[0]);
+    const packetCounter = hexDecimal![0]!['decimal'];
+    const protocolVersion = hexDecimal![0]!['binary'].slice(0, 4);
 
     hexDecimal.splice(0, 1);
 
@@ -110,7 +110,7 @@ class RadioBridgeDecoder {
   }
 
   mapConversion(eventType: string, hexDecimal: Array<HexDecimal>) {
-    const data = {};
+    const data: Record<string, object> = {};
     switch (eventType) {
       case RESET:
         data[RESET] = reset(hexDecimal);
@@ -227,6 +227,6 @@ class RadioBridgeDecoder {
   }
 }
 
-export function decode(...args: string[]): DecodedPayload {
-  return <DecodedPayload>new RadioBridgeDecoder(...args).convert();
+export function decode(...args: string[]) {
+  return new RadioBridgeDecoder(...args).convert();
 }

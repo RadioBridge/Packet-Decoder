@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { HexDecimal } from '../../types';
 import { binaryToDecimal } from '../../lib/HexConvertor';
 

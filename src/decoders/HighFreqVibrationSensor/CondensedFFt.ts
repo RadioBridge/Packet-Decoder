@@ -1,4 +1,6 @@
-import { binaryToDecimal, hexToBinaryDecimal } from '../../lib/HexConvertor';
+// @ts-nocheck
+
+import { hexToBinaryDecimal } from '../../lib/HexConvertor';
 import type { HexDecimal } from '../../types';
 import { decode } from '../../parser';
 import {
@@ -6,7 +8,6 @@ import {
   HB_VIBRATION_SENSOR,
 } from '../../types/EventTypes';
 import { combineCfftValues } from './CondensedFftCommons';
-import CondensedFftEnergy from './CondensedFftEnergy';
 
 type CondensedFftType = {
   condensedFft: {

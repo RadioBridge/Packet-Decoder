@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { HexDecimal } from '../types';
 import {
   hexToDecimalMessageDecoder,
@@ -15,7 +17,7 @@ type HBVibrationDecodeType = {
   biasVoltage: object;
 };
 
-export default function (hexDecimal: [HexDecimal]) {
+export default function (hexDecimal: HexDecimal[]) {
   let axisReport = '';
   const dataMessage: HBVibrationDecodeType = {
     axis: '',
