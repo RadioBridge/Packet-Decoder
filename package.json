@@ -63,7 +63,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/radiobridge/packet-decoder.git"
+    "url": "git+https://github.com/deepakmaurya/radiobridge-packet-decoder.git"
   },
   "keywords": [
     "radiobridge",
