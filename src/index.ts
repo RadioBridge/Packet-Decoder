@@ -6,8 +6,8 @@ import { decode } from './parser';
 import { base64decode } from './lib/utils';
 import { binaryToHex } from './lib/HexConvertor';
 
-export const decodePayload = (hexPayload: string) => {
-  return decode(hexPayload);
+export const decodePayload = (...args: string[]) => {
+  return decode(...args);
 };
 
 export const decodeTtnPayload = (receivedPayload: string) => {

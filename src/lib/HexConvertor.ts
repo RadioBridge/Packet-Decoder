@@ -1,8 +1,12 @@
 import * as locutusModule from 'locutus';
-import { math } from 'locutus/php';
+import * as math from 'locutus/php/math';
 import { HexDecimal } from '../types';
 
 export function hexToBinaryDecimal(data: string): HexDecimal[] {
+  if (typeof data === 'undefined') {
+    console.trace(data);
+    console.dir(data);
+  }
   const hexData = data.match(new RegExp('.{1,2}', 'g')) || [];
   const hexDecimalBinary: Array<HexDecimal> = [];
   hexData.forEach((singleHexByte) => {
