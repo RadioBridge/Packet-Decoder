@@ -1,6 +1,6 @@
 {
   "name": "@radiobridge/packet-decoder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Decodes the RadioBridge sensor packets",
   "cdn": "dist/index.umd.js",
   "main": "dist/index.js",
@@ -74,9 +74,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/[repositoryOwner]/[repositoryName]/issues"
+    "url": "https://github.com/deepakmaurya/radiobridge-packet-decoder/issues"
   },
-  "homepage": "https://github.com/[repositoryOwner]/[repositoryName]#readme",
+  "homepage": "https://github.com/deepakmaurya/radiobridge-packet-decoder#readme",
   "dependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
     "buffer": "^6.0.3",

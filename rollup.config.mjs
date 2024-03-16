@@ -65,7 +65,7 @@ const options = {
       plugins: [terser()],
     }),
     createOutputOptions({
-      file: `dist/abcd.min.js`,
+      file: `./dist/radiobridge-decoder.min.js`,
       format: "iife",
       sourceMap: 'inline',
     }),

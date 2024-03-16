@@ -1,37 +1,22 @@
-# RadioBridge Decoder
-
-This document describes the response format produced by decoder for all the RadioBridge sensors.
-
-## Output Format
-
-Decoder accepts a Hexadecimal payload and returns the decoded values as an JSON Object. JSON Object includes the following parameters.
-
-## Example
-
-```json
-// Input: 0175640367180104686D
-// Output:
-{
-  protocol: ProtocolVersion,
-  counter: PacketCounter,
-  type: "RESET",
-  reset: {
-    device: DeviceType,
-    firmware: FirmwareVersion,
-    hardware: HardwareVersion
-  }
-}
-```
-
-## Usage
-
-To decode the payload you need to call the following function.
-
-1. This function accepts the Hex payload only.
-
- ```let result = decodePayload('170700');```
-2. Following functions are also available depending on the LNS network, pass the raw data to the function to decode the payload.
-
-```let result = decodeTtnPayload('GAYDAQ==');```
-
-```let result = decodeChirpstackPayload('FwYDAA==');```
+## Sensor Decode Output Examples
+1. [Common Events - Supervisory, Reset, Tamper etc](./DecoderDocs/CommonEvents.md)
+2. [Acceleration Movement Sensor](./DecoderDocs/AccelerationMovementSensor.md)
+3. [Air Temperature & Humidity Sensor](./DecoderDocs/AirTemperatureAndHumiditySensor.md)
+4. [Ambient Light Sensor](./DecoderDocs/AmbientLightSensor.md)
+5. [Compass](./DecoderDocs/CompassSensor.md)
+6. [Contact Sensor](./DecoderDocs/ContactSensor.md)
+7. [Current Loop Sensor](./DecoderDocs/CurrentLoopSensor.md)
+8. [Door Window](./DecoderDocs/DoorWindow.md)
+9. [Glass Break](./DecoderDocs/GlassBreak.md)
+10. [GPS Device](./DecoderDocs/GpsDevice.md)
+11. [High Frequency Vibration Sensor](./DecoderDocs/HBVibrationSensor.md)
+12. [High Frequency Vibration Sensor - Condensed FFT](./DecoderDocs/CondensedFFt.md)
+13. [High Precision Tilt Sensor](./DecoderDocs/HighPrecisionTiltSensor.md)
+14. [Honeywell 5800](./DecoderDocs/HoneywellFiveEightZeroZero.md)
+15. [Magnetometer](./DecoderDocs/MagnetometerSensor.md)
+16. [Tank Level Sensor](./DecoderDocs/TankLevelSensor.md)
+17. [Thermocouple Temperature Sensor](./DecoderDocs/ThermocoupleTemperatureSensor.md)
+18. [Tilt Sensor](./DecoderDocs/TiltSensor.md)
+19. [UltraSonic Sensor](./DecoderDocs/UltraSonicSensor.md)
+20. [Voltage Sensor](./DecoderDocs/VoltageSensor.md)
+21. [Water Sensor](./DecoderDocs/WaterSensor.md)
