@@ -26,7 +26,7 @@ console.log(decoder.decodePayload('1901030126000000000000'))
 
 ### JavaScript - Browser compatible
 
-Download the JS file from [here](https://github.com/deepakmaurya/radiobridge-packet-decoder/blob/master/dist/radiobridge-decoder.min.js)
+Download the JS file from [here](https://github.com/RadioBridge/Packet-Decoder/blob/master/dist/radiobridge-decoder.min.js)
 ```js
 <script type="text/javascript" src="radiobridge-decoder.min.js"></script>
 
@@ -75,6 +75,6 @@ decodePayload function accepts a Hexadecimal payload and returns the decoded val
 
 ## Sensor Decode Examples
 
-Please refer to the [GitHub README](https://github.com/deepakmaurya/radiobridge-packet-decoder/tree/master/DecoderDocs#readme) to view the sensors output in detail.
+Please refer to the [GitHub README](https://github.com/RadioBridge/Packet-Decoder/tree/master/DecoderDocs#readme) to view the sensors output in detail.
 
 

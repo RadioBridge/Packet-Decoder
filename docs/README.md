@@ -30,7 +30,7 @@ Radio Bridge Packet Decoder
 
 #### Defined in
 
-[index.ts:21](https://github.com/deepakmaurya/radiobridge-packet-decoder/blob/61c3f88/src/index.ts#L21)
+[index.ts:21](https://github.com/RadioBridge/Packet-Decoder/blob/61c3f88/src/index.ts#L21)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[index.ts:17](https://github.com/deepakmaurya/radiobridge-packet-decoder/blob/61c3f88/src/index.ts#L17)
+[index.ts:17](https://github.com/RadioBridge/Packet-Decoder/blob/61c3f88/src/index.ts#L17)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[index.ts:25](https://github.com/deepakmaurya/radiobridge-packet-decoder/blob/61c3f88/src/index.ts#L25)
+[index.ts:25](https://github.com/RadioBridge/Packet-Decoder/blob/61c3f88/src/index.ts#L25)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[index.ts:9](https://github.com/deepakmaurya/radiobridge-packet-decoder/blob/61c3f88/src/index.ts#L9)
+[index.ts:9](https://github.com/RadioBridge/Packet-Decoder/blob/61c3f88/src/index.ts#L9)
 
 ___
 
@@ -110,4 +110,4 @@ ___
 
 #### Defined in
 
-[index.ts:13](https://github.com/deepakmaurya/radiobridge-packet-decoder/blob/61c3f88/src/index.ts#L13)
+[index.ts:13](https://github.com/RadioBridge/Packet-Decoder/blob/61c3f88/src/index.ts#L13)
